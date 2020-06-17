@@ -1,0 +1,28 @@
+[package]
+name = "site24x7_exporter"
+version = "0.1.0"
+authors = ["Sven-Hendrik Haase <svenstaro@gmail.com>"]
+description = "A Prometheus compatible exporter for site24x7.com"
+edition = "2018"
+license = "MIT"
+repository = "https://github.com/svenstaro/site24x7_exporter"
+
+[profile.release]
+lto = true
+
+[dependencies]
+dotenv = { version = "0.15.0" }
+reqwest = { version = "0.10", features = ["json"] }
+prometheus = "0.8"
+structopt = "0.3"
+http = "0.2"
+simplelog = "0.8"
+log = "0.4"
+anyhow = "1"
+thiserror = "1"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_repr = "0.1"
+serde_path_to_error = "0.1"
+tokio = { version = "0.2", features = ["full"] }
+hyper = "0.13"
