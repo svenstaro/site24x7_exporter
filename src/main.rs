@@ -137,9 +137,7 @@ async fn fetch_current_status(
                     e.to_string()
                 ))
             })
-            .context(format!(
-                "Couldn't parse server response while fetching monitors."
-            ))?;
+            .context("Couldn't parse server response while fetching monitors.".to_string())?;
 
     match current_status_resp_parsed {
         site24x7_types::CurrentStatusResponse::Success(inner) => Ok(inner.data),
@@ -156,7 +154,7 @@ async fn fetch_current_status(
 }
 
 /// Set the Prometheus metrics for a specfic monitor.
-fn set_metrics(monitors: &Vec<site24x7_types::MonitorMaybe>, monitor_group: &str) {
+fn set_metrics(monitors: &[site24x7_types::MonitorMaybe], monitor_group: &str) {
     for monitor_maybe in monitors {
         let monitor_type = monitor_maybe.to_string();
         let monitor = match monitor_maybe {
@@ -316,7 +314,7 @@ async fn main() -> Result<()> {
     // Figure out Zoho accounts endpoint.
     let zoho_endpoint = format!(
         "https://accounts.zoho.{}",
-        args.site24x7_endpoint.splitn(2, ".").last().unwrap()
+        args.site24x7_endpoint.splitn(2, '.').last().unwrap()
     );
     info!("Using site24x7 endpoint: {}", site24x7_endpoint);
     info!("Using Zoho endpoint: {}", zoho_endpoint);
