@@ -210,7 +210,7 @@ async fn hyper_service(
     let mut access_token = access_token.to_owned();
 
     if req.method() != Method::GET || req.uri().path() != metrics_path {
-        return Ok(Response::new(format!("Try {}", metrics_path).into()));
+        return Ok(Response::new(format!("site24x7_exporter\n\nTry {}", metrics_path).into()));
     }
 
     let current_status = fetch_current_status(&CLIENT, &site24x7_endpoint, &access_token).await;
