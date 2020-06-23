@@ -12,7 +12,7 @@ lto = true
 
 [dependencies]
 dotenv = { version = "0.15.0" }
-reqwest = { version = "0.10", features = ["json"] }
+reqwest = { version = "0.10", features = ["json", "rustls-tls"], default-features = false }
 prometheus = "0.8"
 structopt = "0.3"
 http = "0.2"
