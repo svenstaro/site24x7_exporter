@@ -1,4 +1,9 @@
 # site24x7_exporter
+
+[![GitHub Actions Workflow](https://github.com/svenstaro/site24x7_exporter/workflows/Build/badge.svg)](https://github.com/svenstaro/site24x7_exporter/actions)
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/svenstaro/site24x7_exporter)](https://cloud.docker.com/repository/docker/svenstaro/site24x7_exporter/)
+[![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/svenstaro/site24x7_exporter/blob/master/LICENSE)
+
 A Prometheus compatible exporter for site24x7.com
 
 ## Features
