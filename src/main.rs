@@ -156,41 +156,46 @@ async fn fetch_current_status(
 }
 
 /// Set the Prometheus metrics for a specfic monitor.
-fn set_metrics_for_monitor(
-    monitor: &site24x7_types::Monitor,
-    monitor_type: &str,
-    monitor_group: &str,
-) {
-    for location in &monitor.locations {
-        debug!(
-            "Setting MONITOR_UP_GAUGE with {{monitor_type=\"{}\", \
+fn set_metrics(monitors: &Vec<site24x7_types::MonitorMaybe>, monitor_group: &str) {
+    for monitor_maybe in monitors {
+        let monitor_type = monitor_maybe.to_string();
+        let monitor = match monitor_maybe {
+            site24x7_types::MonitorMaybe::URL(m)
+            | site24x7_types::MonitorMaybe::HOMEPAGE(m)
+            | site24x7_types::MonitorMaybe::REALBROWSER(m) => m,
+            _ => continue,
+        };
+        for location in &monitor.locations {
+            debug!(
+                "Setting MONITOR_UP_GAUGE with {{monitor_type=\"{}\", \
                         monitor_name=\"{}\", monitor_group=\"{}\", location=\"{}\"}} \
                         to {}",
-            &monitor_type,
-            &monitor.name,
-            &monitor_group,
-            &location.location_name,
-            location.clone().status as i64
-        );
-        MONITOR_UP_GAUGE
-            .with_label_values(&[
                 &monitor_type,
                 &monitor.name,
                 &monitor_group,
                 &location.location_name,
-            ])
-            .set(location.clone().status as i64);
+                location.clone().status as i64
+            );
+            MONITOR_UP_GAUGE
+                .with_label_values(&[
+                    &monitor_type,
+                    &monitor.name,
+                    &monitor_group,
+                    &location.location_name,
+                ])
+                .set(location.clone().status as i64);
 
-        // The original gauge is in milliseconds. Convert it to seconds first as prometheus wants
-        // its time series data in seconds.
-        MONITOR_LATENCY_SECONDS_GAUGE
-            .with_label_values(&[
-                &monitor_type,
-                &monitor.name,
-                &monitor_group,
-                &location.location_name,
-            ])
-            .set(location.clone().attribute_value as f64 / 1000.0);
+            // The original gauge is in milliseconds. Convert it to seconds first as prometheus wants
+            // its time series data in seconds.
+            MONITOR_LATENCY_SECONDS_GAUGE
+                .with_label_values(&[
+                    &monitor_type,
+                    &monitor.name,
+                    &monitor_group,
+                    &location.location_name,
+                ])
+                .set(location.clone().attribute_value as f64 / 1000.0);
+        }
     }
 }
 
@@ -271,28 +276,10 @@ async fn hyper_service(
 
     // Monitors can either be in a flat list of plain Monitors or they can be inside of a
     // MonitorGroup with is simply a list of monitors.
-    for monitor_maybe in current_status_data.monitors {
-        let monitor_type = monitor_maybe.to_string();
-        let monitor = match monitor_maybe {
-            site24x7_types::MonitorMaybe::URL(m)
-            | site24x7_types::MonitorMaybe::HOMEPAGE(m)
-            | site24x7_types::MonitorMaybe::REALBROWSER(m) => m,
-            _ => continue,
-        };
-        set_metrics_for_monitor(&monitor, &monitor_type, "");
-    }
+    set_metrics(&current_status_data.monitors, "");
 
     for monitor_group in current_status_data.monitor_groups {
-        for monitor_maybe in monitor_group.monitors {
-            let monitor_type = monitor_maybe.to_string();
-            let monitor = match monitor_maybe {
-                site24x7_types::MonitorMaybe::URL(m)
-                | site24x7_types::MonitorMaybe::HOMEPAGE(m)
-                | site24x7_types::MonitorMaybe::REALBROWSER(m) => m,
-                _ => continue,
-            };
-            set_metrics_for_monitor(&monitor, &monitor_type, &monitor_group.group_name);
-        }
+        set_metrics(&monitor_group.monitors, &monitor_group.group_name);
     }
 
     let metric_families = prometheus::gather();
