@@ -2,26 +2,27 @@
 use serde::{Deserialize, Deserializer};
 use serde_repr::Deserialize_repr;
 use thiserror::Error;
+use strum_macros::Display;
 
-#[derive(Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug)]
 #[serde(untagged)]
 pub enum CurrentStatusResponse {
     Success(CurrentStatusResponseInner),
     Error(ApiError),
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug)]
 pub struct ApiError {
     pub error_code: u16,
     pub message: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug)]
 pub struct CurrentStatusResponseInner {
     pub data: CurrentStatusData,
 }
 
-#[derive(Deserialize_repr, Debug)]
+#[derive(Clone, Deserialize_repr, Debug)]
 #[repr(u8)]
 pub enum Status {
     Down = 0,
@@ -34,7 +35,7 @@ pub enum Status {
     ConfigurationError = 10,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug)]
 pub struct CurrentStatusData {
     #[serde(default)]
     pub monitors: Vec<MonitorMaybe>,
@@ -70,7 +71,7 @@ where
     Ok(v)
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug)]
 pub struct Location {
     pub status: Status,
     #[serde(deserialize_with = "from_attribute_value")]
@@ -78,7 +79,7 @@ pub struct Location {
     pub location_name: String,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Clone, Deserialize, Display, Debug)]
 #[serde(tag = "monitor_type")]
 pub enum MonitorMaybe {
     URL(Monitor),
@@ -89,13 +90,15 @@ pub enum MonitorMaybe {
     Unknown,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug)]
 pub struct Monitor {
     pub name: String,
+    pub unit: String,
     pub attribute_key: String,
     pub status: Status,
     pub locations: Vec<Location>,
-    pub attributeName: String,
+    #[serde(rename = "attributeName")]
+    pub attribute_name: String,
     pub attribute_label: String,
     #[serde(deserialize_with = "from_attribute_value")]
     pub attribute_value: u64,
@@ -104,7 +107,7 @@ pub struct Monitor {
     pub tags: Vec<String>,
 }
 
-#[derive(Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug)]
 pub struct MonitorGroup {
     #[serde(default)]
     pub monitors: Vec<MonitorMaybe>,
