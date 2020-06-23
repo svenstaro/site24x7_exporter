@@ -310,7 +310,7 @@ async fn hyper_service(
 async fn main() -> Result<()> {
     let args = Config::from_args();
 
-    dotenv::dotenv()?;
+    dotenv::dotenv().ok();
 
     let client_id = std::env::var("ZOHO_CLIENT_ID").context("ZOHO_CLIENT_ID must be set")?;
     let client_secret =
