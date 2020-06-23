@@ -55,3 +55,4 @@ You should see some sweet metrics if everything is working fine.
 ## Usage in Prometheus
 
 Make sure to not poll this too often as site24x7 has API usage limits per day.
+The limit seems to be around 70000 per day so polling every 5 seconds should be safe.
