@@ -1,6 +1,16 @@
 # site24x7_exporter
 A Prometheus compatible exporter for site24x7.com
 
+## Features
+
+This exporter currently supports these monitor types:
+
+- URL "Website"
+- HOMEPAGE "Web Page Speed (Browser)"
+- REALBROWSER "Web Transaction (Browser)"
+
+It also supports monitor groups and exposes them via tags.
+
 ## How to use
 
 ### Preparation
