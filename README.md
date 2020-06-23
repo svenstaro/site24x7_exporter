@@ -3,6 +3,8 @@ A Prometheus compatible exporter for site24x7.com
 
 ## How to use
 
+### Preparation
+
 First you need to create an OAuth 2.0 application as per https://www.site24x7.com/help/api/index.html#getting-started
 For instance, go to https://api-console.zoho.eu (or your whatever your region's endpoint is) and then create a new
 application of type "Self Client". Note the client's `Client ID` and `Client Secret`, you'll need them later.
@@ -35,6 +37,8 @@ You'll get back a response that looks roughly like this:
 
 Copy the value of `refresh_token` somewhere, we'll need it later.
 
+### Run via cargo
+
 The exporter expects to receive the OAuth 2.0 data via environment variables.
 These are:
 
@@ -50,7 +54,29 @@ Let's set them and spin up our exporter:
     cargo run -- --site24x7-endpoint site24x7.eu
     curl http://localhost:9803/metrics
 
-You should see some sweet metrics if everything is working fine.
+Alternatively you can add these environment variables to an `.env` file in this format:
+
+    ZOHO_CLIENT_ID=your-client-id
+    ZOHO_CLIENT_SECRET=your-client-secret
+    ZOHO_REFRESH_TOKEN=your-refresh-token
+
+This is especially convenient for development purposes.
+
+### Run via docker
+
+    docker run \
+        -e ZOHO_CLIENT_ID=your-client-id \
+        -e ZOHO_CLIENT_SECRET=your-client-secret \
+        -e ZOHO_REFRESH_TOKEN=your-refresh-token \
+        svenstaro/site24x7_exporter --site24x7-endpoint site24x7.eu
+
+### Testing
+
+Try
+
+    curl localhost:9803/metrics
+
+and you should see some sweet metrics if everything is working fine.
 
 ## Usage in Prometheus
 
