@@ -16,6 +16,34 @@ This exporter currently supports these monitor types:
 
 It also supports monitor groups and exposes them via tags.
 
+## CLI usage
+
+```
+site24x7_exporter 0.1.0
+Sven-Hendrik Haase <svenstaro@gmail.com>
+A Prometheus compatible exporter for site24x7.com
+
+USAGE:
+    site24x7_exporter [OPTIONS]
+
+FLAGS:
+    -h, --help       Prints help information
+    -V, --version    Prints version information
+
+OPTIONS:
+        --web.listen-address <listen-address>
+            Address on which to expose metrics and web interface [default: 0.0.0.0:9803]
+
+        --log.level <loglevel>
+            Only log messages with the given severity or above [default: info]  [possible values: error,
+            warn, info, debug, trace]
+        --web.telemetry-path <metrics-path>        Path under which to expose metrics [default: /metrics]
+        --site24x7-endpoint <site24x7-endpoint>
+            API endpoint to use (depends on region, see https://site24x7.com/help/api) [default: site24x7.com]
+            [possible values: site24x7.com, site24x7.eu, site24x7.cn, site24x7.in,
+            site24x7.net.au]
+```
+
 ## How to use
 
 ### Preparation
@@ -92,6 +120,13 @@ Try
     curl localhost:9803/metrics
 
 and you should see some sweet metrics if everything is working fine.
+
+### Troubleshooting
+
+In case you get weird errors, try running with `--log.level debug` and then make a request
+against the metrics endpoint. You should see a ton of helpful output. Be super careful though
+as this **WILL EXPOSE SECRETS**. Do NOT run `--log.level debug` or `--log.level trace` for any
+purposes except for local debugging.
 
 ## Usage in Prometheus
 
