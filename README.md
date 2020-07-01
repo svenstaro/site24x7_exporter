@@ -56,13 +56,19 @@ Now it's time to get a refresh token. First, we'll need to generate a temporary 
 enter `Site24x7.Reports.Read` as the scope.
 Choose a time duration of 10 minutes for the code and finally click "CREATE". You'll receive a temporary code.
 
-In order to get your permanent refresh token, run this curl:
+In order to get your permanent refresh token, prepare a new file `curl-secrets` with these contents:
 
-    curl https://accounts.zoho.eu/oauth/v2/token -X POST \
-        -d "client_id=your-client-id" \
-        -d "client_secret=your-client-secret" \
-        -d "code=your-temporary-code" \
-        -d "grant_type=authorization_code"
+    client_id=your-client-id&
+    client_secret=your-client-secret&
+    code=your-temporary-code&
+    grant_type=authorization_code
+    
+and then run this curl:
+
+    curl https://accounts.zoho.eu/oauth/v2/token -X POST @curl-secrets
+    
+We use the `curl-secrets` file for security purposes so that your secrets won't be temporarily visible to all users
+in a multiuser system.
 
 Note: Remember to use your proper region endpoint!
 
@@ -103,15 +109,11 @@ Alternatively you can add these environment variables to an `.env` file in this 
     ZOHO_CLIENT_SECRET=your-client-secret
     ZOHO_REFRESH_TOKEN=your-refresh-token
 
-This is especially convenient for development purposes.
+This is especially convenient for development purposes or local Docker usage as shown below.
 
 ### Run via docker
 
-    docker run \
-        -e ZOHO_CLIENT_ID=your-client-id \
-        -e ZOHO_CLIENT_SECRET=your-client-secret \
-        -e ZOHO_REFRESH_TOKEN=your-refresh-token \
-        svenstaro/site24x7_exporter --site24x7-endpoint site24x7.eu
+    docker run --env-file ./env svenstaro/site24x7_exporter --site24x7-endpoint site24x7.eu
 
 ### Testing
 
