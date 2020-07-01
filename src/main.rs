@@ -133,9 +133,19 @@ async fn fetch_current_status(
     let current_status_resp_parsed: site24x7_types::CurrentStatusResponse =
         current_status_resp_result
             .map_err(|e| {
+                // For better error path output, try to parse into `CurrentStatusResponseInner`
+                // directly. This will give us a path to the error.
+                let debug_deserializer =
+                    &mut serde_json::Deserializer::from_str(&current_status_resp_text);
+                let debug_deserializer_result: Result<
+                    site24x7_types::CurrentStatusResponseInner,
+                    _,
+                > = serde_path_to_error::deserialize(debug_deserializer);
+                let debug_err = debug_deserializer_result.err();
                 anyhow!(site24x7_types::CurrentStatusError::ParseError(
                     e.to_string()
                 ))
+                .context(debug_err.map(|e| e.to_string()).unwrap_or_default())
             })
             .context("Couldn't parse server response while fetching monitors.".to_string())?;
 
@@ -210,7 +220,9 @@ async fn hyper_service(
     let mut access_token = access_token.to_owned();
 
     if req.method() != Method::GET || req.uri().path() != metrics_path {
-        return Ok(Response::new(format!("site24x7_exporter\n\nTry {}", metrics_path).into()));
+        return Ok(Response::new(
+            format!("site24x7_exporter\n\nTry {}", metrics_path).into(),
+        ));
     }
 
     let current_status = fetch_current_status(&CLIENT, &site24x7_endpoint, &access_token).await;
