@@ -78,8 +78,11 @@ async fn get_access_token(
         grant_type: "refresh_token".into(),
     };
 
+    let access_token_endpoint = format!("{}/oauth/v2/token", &zoho_endpoint);
+    info!("Requesting access token from {}", access_token_endpoint);
+    debug!("Getting access token with info:\n{:#?}", access_token_request);
     let access_token_resp = client
-        .post(&format!("{}/oauth/v2/token", &zoho_endpoint))
+        .post(&access_token_endpoint)
         .form(&access_token_request)
         .send()
         .await?;
@@ -92,7 +95,11 @@ async fn get_access_token(
             access_token_resp_text
         ))?;
     match access_token_resp_parsed {
-        zoho_types::AccessTokenResponse::Success(inner) => Ok(inner.access_token),
+        zoho_types::AccessTokenResponse::Success(inner) => {
+            info!("Successfully acquired access token");
+            debug!("Access token value: {}", inner.access_token);
+            Ok(inner.access_token)
+        }
         zoho_types::AccessTokenResponse::Error(e) => Err(anyhow!(
             "Error while getting access token. Server replied '{}'",
             e.error
@@ -321,7 +328,9 @@ async fn main() -> Result<()> {
 
     TermLogger::init(
         args.loglevel,
-        simplelog::Config::default(),
+        simplelog::ConfigBuilder::new()
+            .set_thread_level(simplelog::LevelFilter::Trace)
+            .build(),
         simplelog::TerminalMode::Mixed,
     )?;
 
