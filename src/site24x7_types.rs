@@ -1,8 +1,8 @@
 //! Module containing Site24x7 API-specific types.
 use serde::{Deserialize, Deserializer};
 use serde_repr::Deserialize_repr;
-use thiserror::Error;
 use strum_macros::Display;
+use thiserror::Error;
 
 #[derive(Clone, Deserialize, Debug)]
 #[serde(untagged)]
