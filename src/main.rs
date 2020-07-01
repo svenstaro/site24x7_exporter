@@ -80,7 +80,10 @@ async fn get_access_token(
 
     let access_token_endpoint = format!("{}/oauth/v2/token", &zoho_endpoint);
     info!("Requesting access token from {}", access_token_endpoint);
-    debug!("Getting access token with info:\n{:#?}", access_token_request);
+    debug!(
+        "Getting access token with info:\n{:#?}",
+        access_token_request
+    );
     let access_token_resp = client
         .post(&access_token_endpoint)
         .form(&access_token_request)
