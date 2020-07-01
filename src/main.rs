@@ -284,6 +284,10 @@ async fn hyper_service(
 
     // Update metrics based on the API data gathered above.
 
+    // Reset these first so that we don't keep seeing any deleted monitors.
+    MONITOR_UP_GAUGE.reset();
+    MONITOR_LATENCY_SECONDS_GAUGE.reset();
+
     // Monitors can either be in a flat list of plain Monitors or they can be inside of a
     // MonitorGroup with is simply a list of monitors.
     set_metrics(&current_status_data.monitors, "");
