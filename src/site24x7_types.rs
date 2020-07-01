@@ -35,6 +35,14 @@ pub enum Status {
     ConfigurationError = 10,
 }
 
+/// Default to `Status::ConfigurationError` as observation shows that this is the most probable
+/// case if we don't see a proper value for this enum.
+impl Default for Status {
+    fn default() -> Self {
+        Status::ConfigurationError
+    }
+}
+
 #[derive(Clone, Deserialize, Debug)]
 pub struct CurrentStatusData {
     #[serde(default)]
@@ -73,8 +81,9 @@ where
 
 #[derive(Clone, Deserialize, Debug)]
 pub struct Location {
+    #[serde(default)]
     pub status: Status,
-    #[serde(deserialize_with = "from_attribute_value")]
+    #[serde(default, deserialize_with = "from_attribute_value")]
     pub attribute_value: u64,
     pub location_name: String,
 }
@@ -93,14 +102,14 @@ pub enum MonitorMaybe {
 #[derive(Clone, Deserialize, Debug)]
 pub struct Monitor {
     pub name: String,
-    pub unit: String,
-    pub attribute_key: String,
+    pub unit: Option<String>,
+    pub attribute_key: Option<String>,
     pub status: Status,
     pub locations: Vec<Location>,
     #[serde(rename = "attributeName")]
     pub attribute_name: String,
-    pub attribute_label: String,
-    #[serde(deserialize_with = "from_attribute_value")]
+    // pub attribute_label: String,
+    #[serde(default, deserialize_with = "from_attribute_value")]
     pub attribute_value: u64,
     pub monitor_id: String,
     #[serde(default)]
