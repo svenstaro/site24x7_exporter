@@ -12,32 +12,34 @@ jobs:
         rust: [stable, beta, nightly]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - uses: actions-rs/toolchain@v1
+      - name: Setup Rust toolchain
+        uses: actions-rs/toolchain@v1
         with:
           profile: minimal
           toolchain: ${{ matrix.rust }}
           override: true
           components: rustfmt, clippy
 
-      - name: build
+      - name: cargo build
         uses: actions-rs/cargo@v1
         with:
           command: build
 
-      - name: test
+      - name: cargo test
         uses: actions-rs/cargo@v1
         with:
           command: test
 
-      - name: fmt
+      - name: cargo fmt
         uses: actions-rs/cargo@v1
         with:
           command: fmt
           args: --all -- --check
 
-      - name: clippy
+      - name: cargo clippy
         uses: actions-rs/cargo@v1
         with:
           command: clippy
