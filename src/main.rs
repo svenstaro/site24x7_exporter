@@ -66,19 +66,17 @@ pub struct Config {
 /// See https://www.site24x7.com/help/api/index.html#authentication
 async fn get_access_token(
     client: &reqwest::Client,
-    zoho_endpoint: &str,
-    client_id: &str,
-    client_secret: &str,
+    site24x7_client_info: &site24x7_types::Site24x7ClientInfo,
     refresh_token: &str,
 ) -> Result<String> {
     let access_token_request = zoho_types::AccessTokenRequest {
-        client_id: client_id.into(),
-        client_secret: client_secret.into(),
+        client_id: site24x7_client_info.client_id.clone(),
+        client_secret: site24x7_client_info.client_secret.clone(),
         refresh_token: refresh_token.into(),
         grant_type: "refresh_token".into(),
     };
 
-    let access_token_endpoint = format!("{}/oauth/v2/token", &zoho_endpoint);
+    let access_token_endpoint = format!("{}/oauth/v2/token", &site24x7_client_info.zoho_endpoint);
     info!("Requesting access token from {}", access_token_endpoint);
     debug!(
         "Getting access token with info:\n{:#?}",
@@ -219,10 +217,7 @@ fn set_metrics(monitors: &[site24x7_types::MonitorMaybe], monitor_group: &str) {
 
 async fn hyper_service(
     req: Request<Body>,
-    site24x7_endpoint: &str,
-    zoho_endpoint: &str,
-    client_id: &str,
-    client_secret: &str,
+    site24x7_client_info: &site24x7_types::Site24x7ClientInfo,
     refresh_token: &str,
     access_token: &str,
     metrics_path: &str,
@@ -235,7 +230,12 @@ async fn hyper_service(
         ));
     }
 
-    let current_status = fetch_current_status(&CLIENT, &site24x7_endpoint, &access_token).await;
+    let current_status = fetch_current_status(
+        &CLIENT,
+        &site24x7_client_info.site24x7_endpoint,
+        &access_token,
+    )
+    .await;
 
     let current_status_data = match current_status {
         Ok(ref current_status_data) => {
@@ -253,14 +253,8 @@ async fn hyper_service(
                 "Couldn't get status update due to an authentication error. \
                 Probably the access token has timed out. Trying to get a new one."
             );
-            let access_token_res = get_access_token(
-                &CLIENT,
-                &zoho_endpoint,
-                &client_id,
-                &client_secret,
-                &refresh_token,
-            )
-            .await;
+            let access_token_res =
+                get_access_token(&CLIENT, &site24x7_client_info, &refresh_token).await;
             access_token = match access_token_res {
                 Ok(access_token) => access_token,
                 Err(e) => {
@@ -272,7 +266,13 @@ async fn hyper_service(
                 }
             };
 
-            match fetch_current_status(&CLIENT, &site24x7_endpoint, &access_token).await {
+            match fetch_current_status(
+                &CLIENT,
+                &site24x7_client_info.site24x7_endpoint,
+                &access_token,
+            )
+            .await
+            {
                 Ok(current_status_data) => current_status_data,
                 Err(e) => {
                     error!("{:?}", e);
@@ -337,52 +337,46 @@ async fn main() -> Result<()> {
         simplelog::TerminalMode::Mixed,
     )?;
 
-    let site24x7_endpoint = format!("https://{}/api", args.site24x7_endpoint);
+    let site24x7_client_info = site24x7_types::Site24x7ClientInfo {
+        site24x7_endpoint: format!("https://{}/api", args.site24x7_endpoint),
+        zoho_endpoint: format!(
+            "https://accounts.zoho.{}",
+            args.site24x7_endpoint.splitn(2, '.').last().unwrap()
+        ),
+        client_id,
+        client_secret,
+    };
 
     // Figure out Zoho accounts endpoint.
-    let zoho_endpoint = format!(
-        "https://accounts.zoho.{}",
-        args.site24x7_endpoint.splitn(2, '.').last().unwrap()
+    info!(
+        "Using site24x7 endpoint: {}",
+        site24x7_client_info.site24x7_endpoint
     );
-    info!("Using site24x7 endpoint: {}", site24x7_endpoint);
-    info!("Using Zoho endpoint: {}", zoho_endpoint);
+    info!(
+        "Using Zoho endpoint: {}",
+        site24x7_client_info.zoho_endpoint
+    );
 
     // An access token is only available for a period of time.
     // We sometimes have to refresh it.
-    let access_token = get_access_token(
-        &CLIENT,
-        &zoho_endpoint,
-        &client_id,
-        &client_secret,
-        &refresh_token,
-    )
-    .await?;
+    let access_token = get_access_token(&CLIENT, &site24x7_client_info, &refresh_token).await?;
 
     let metrics_path = args.metrics_path.to_string();
     let make_service = make_service_fn(move |_conn| {
-        let site24x7_endpoint = site24x7_endpoint.clone();
-        let zoho_endpoint = zoho_endpoint.clone();
-        let client_id = client_id.clone();
-        let client_secret = client_secret.clone();
+        let site24x7_client_info = site24x7_client_info.clone();
         let refresh_token = refresh_token.clone();
         let access_token = access_token.clone();
         let metrics_path = metrics_path.clone();
         async move {
             Ok::<_, hyper::Error>(service_fn(move |req| {
-                let site24x7_endpoint = site24x7_endpoint.clone();
-                let zoho_endpoint = zoho_endpoint.clone();
-                let client_id = client_id.clone();
-                let client_secret = client_secret.clone();
+                let site24x7_client_info = site24x7_client_info.clone();
                 let refresh_token = refresh_token.clone();
                 let access_token = access_token.clone();
                 let metrics_path = metrics_path.clone();
                 async move {
                     hyper_service(
                         req,
-                        &site24x7_endpoint,
-                        &zoho_endpoint,
-                        &client_id,
-                        &client_secret,
+                        &site24x7_client_info,
                         &refresh_token,
                         &access_token,
                         &metrics_path,

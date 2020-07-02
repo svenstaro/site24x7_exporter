@@ -5,6 +5,14 @@ use strum_macros::Display;
 use thiserror::Error;
 
 #[derive(Clone, Deserialize, Debug)]
+pub struct Site24x7ClientInfo {
+    pub site24x7_endpoint: String,
+    pub zoho_endpoint: String,
+    pub client_id: String,
+    pub client_secret: String,
+}
+
+#[derive(Clone, Deserialize, Debug)]
 #[serde(untagged)]
 pub enum CurrentStatusResponse {
     Success(CurrentStatusResponseInner),
