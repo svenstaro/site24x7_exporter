@@ -64,5 +64,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/release/ ./my-artifact.zip
-          asset_name: site24x7_exporter-${{ github.event.release.tag_name }}-${{ release_name }}
+          asset_path: target/release/${{ matrix.artifact_name }}
+          asset_name: site24x7_exporter-${{ github.event.release.tag_name }}-${{ matrix.release_name }}
