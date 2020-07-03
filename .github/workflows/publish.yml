@@ -51,5 +51,5 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: target/release/${{ matrix.artifact_name }}
           tag: ${{ github.ref }}
-          asset_name: site24x7_exporter-${{ github.event.release.tag_name }}-${{ matrix.release_name }}
+          asset_name: site24x7_exporter-$tag-${{ matrix.release_name }}
           body: ${{ steps.changelog_reader.outputs.log_entry }}
