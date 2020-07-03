@@ -134,3 +134,13 @@ purposes except for local debugging.
 
 Make sure to not poll this too often as site24x7 has API usage limits per day.
 The limit seems to be around 70000 per day so polling every 5 seconds should be safe.
+
+## Releasing
+
+In order to release this, do:
+
+- Increase version number in `Cargo.toml`
+- `cargo build`
+- Prepare `CHANGELOG.md` in keepachangelog.com format
+- `git commit -am <version>`
+- `git tag -sm <version> <version>`
