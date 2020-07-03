@@ -45,25 +45,11 @@ jobs:
           version: ${{ env.CURRENT_VERSION }}
           path: ./CHANGELOG.md
 
-      - name: Create release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: svenstaro/upload-release-action@v2
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: ${{ steps.changelog_reader.outputs.log_entry }}
-          draft: false
-          prerelease: false
-
-      - name: Upload release asset
-        id: upload-release-asset
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: target/release/${{ matrix.artifact_name }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: target/release/${{ matrix.artifact_name }}
+          tag: ${{ github.ref }}
           asset_name: site24x7_exporter-${{ github.event.release.tag_name }}-${{ matrix.release_name }}
-          asset_content_type: binary/octet-stream
+          body: ${{ steps.changelog_reader.outputs.log_entry }}
