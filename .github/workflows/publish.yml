@@ -14,14 +14,17 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
-            artifact_name: site24x7_exporter
+            artifact_name: target/x86_64-unknown-linux-musl/release/site24x7_exporter
             release_name: linux-x86_64
+            target: x86_64-unknown-linux-musl
           - os: windows-latest
-            artifact_name: site24x7_exporter.exe
+            artifact_name: target/x86_64-pc-windows-msvc/release/site24x7_exporter.exe
             release_name: windows-x86_64.exe
+            target: x86_64-pc-windows-msvc
           - os: macos-latest
-            artifact_name: site24x7_exporter
+            artifact_name: target/x86_64-apple-darwin/release/site24x7_exporter
             release_name: macos-x86_64
+            target: x86_64-apple-darwin
 
     steps:
       - name: Checkout code
@@ -31,12 +34,16 @@ jobs:
         uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+          target: ${{ matrix.target }}
+
+      - run: sudo apt install musl-tools
+        if: matrix.os == 'ubuntu-latest'
 
       - name: cargo build
         uses: actions-rs/cargo@v1
         with:
           command: build
-          args: --release --locked
+          args: --release --locked --target=${{ matrix.target }}
 
       - name: Get CHANGELOG.md entry
         id: changelog_reader
@@ -49,7 +56,7 @@ jobs:
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: target/release/${{ matrix.artifact_name }}
+          file: ${{ matrix.artifact_name }}
           tag: ${{ github.ref }}
           asset_name: site24x7_exporter-$tag-${{ matrix.release_name }}
           body: ${{ steps.changelog_reader.outputs.log_entry }}
