@@ -321,14 +321,6 @@ async fn hyper_service(
 async fn main() -> Result<()> {
     let args = Config::from_args();
 
-    dotenv::dotenv().ok();
-
-    let client_id = std::env::var("ZOHO_CLIENT_ID").context("ZOHO_CLIENT_ID must be set")?;
-    let client_secret =
-        std::env::var("ZOHO_CLIENT_SECRET").context("ZOHO_CLIENT_SECRET must be set")?;
-    let refresh_token =
-        std::env::var("ZOHO_REFRESH_TOKEN").context("ZOHO_REFRESH_TOKEN must be set")?;
-
     TermLogger::init(
         args.loglevel,
         simplelog::ConfigBuilder::new()
@@ -336,6 +328,14 @@ async fn main() -> Result<()> {
             .build(),
         simplelog::TerminalMode::Mixed,
     )?;
+
+    dotenv::dotenv().ok();
+
+    let client_id = std::env::var("ZOHO_CLIENT_ID").context("ZOHO_CLIENT_ID must be set")?;
+    let client_secret =
+        std::env::var("ZOHO_CLIENT_SECRET").context("ZOHO_CLIENT_SECRET must be set")?;
+    let refresh_token =
+        std::env::var("ZOHO_REFRESH_TOKEN").context("ZOHO_REFRESH_TOKEN must be set")?;
 
     let site24x7_client_info = site24x7_types::Site24x7ClientInfo {
         site24x7_endpoint: format!("https://{}/api", args.site24x7_endpoint),
@@ -356,6 +356,8 @@ async fn main() -> Result<()> {
         "Using Zoho endpoint: {}",
         site24x7_client_info.zoho_endpoint
     );
+
+    debug!("Reqwest client:\n{:#?}", reqwest::Client::new());
 
     // An access token is only available for a period of time.
     // We sometimes have to refresh it.
