@@ -19,7 +19,7 @@ It also supports monitor groups and exposes them via tags.
 ## CLI usage
 
 ```
-site24x7_exporter 0.1.0
+site24x7_exporter 0.2.2
 Sven-Hendrik Haase <svenstaro@gmail.com>
 A Prometheus compatible exporter for site24x7.com
 
@@ -43,6 +43,12 @@ OPTIONS:
             [possible values: site24x7.com, site24x7.eu, site24x7.cn, site24x7.in,
             site24x7.net.au]
 ```
+
+## Using with proxies
+
+If you need to use proxies in order to make the outgoing HTTP requests, you can set the environment variables
+`https_proxy` and `HTTPS_PROXY` (the latter taking precedence). The proxy will then be used automatically.
+You can see that a proxy will be used as the startup sequence will tell you so.
 
 ## How to use
 
