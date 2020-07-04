@@ -357,7 +357,23 @@ async fn main() -> Result<()> {
         site24x7_client_info.zoho_endpoint
     );
 
-    debug!("Reqwest client:\n{:#?}", reqwest::Client::new());
+    // Info print used proxies if there are any.
+    // Currently we have to do this in a stupid backwards way by parsing the debug output.
+    // Hopefully, we'll be able to do this properly once this is fixed:
+    // https://github.com/seanmonstar/reqwest/issues/967
+    let debug_output = format!("{:?}", *CLIENT);
+    let re = regex::Regex::new(r"^.*System\(\{(.*?)\}").unwrap();
+    if let Some(caps) = re.captures(&debug_output) {
+        if let Some(cap) = caps.get(1) {
+            if cap.as_str().is_empty() {
+                info!("Not using any proxies");
+            } else {
+                info!("Picked up proxies: {}", &caps[1]);
+            }
+        }
+    }
+
+    debug!("Reqwest client:\n{:#?}", *CLIENT);
 
     // An access token is only available for a period of time.
     // We sometimes have to refresh it.
