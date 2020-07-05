@@ -107,6 +107,28 @@ pub enum MonitorMaybe {
     Unknown,
 }
 
+#[derive(Clone, Debug)]
+pub struct Tag {
+    pub key: String,
+    pub value: String,
+}
+
+impl<'de> Deserialize<'de> for Tag {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: Deserializer<'de>,
+    {
+        let s: &str = Deserialize::deserialize(deserializer)?;
+
+        let mut parts = s.splitn(2, ':').fuse();
+
+        let key = parts.next().unwrap_or_default().to_string();
+        let value = parts.next().unwrap_or_default().to_string();
+
+        Ok(Tag { key, value })
+    }
+}
+
 #[derive(Clone, Deserialize, Debug)]
 pub struct Monitor {
     pub name: String,
@@ -121,7 +143,7 @@ pub struct Monitor {
     pub attribute_value: u64,
     pub monitor_id: String,
     #[serde(default)]
-    pub tags: Vec<String>,
+    pub tags: Vec<Tag>,
 }
 
 #[derive(Clone, Deserialize, Debug)]
