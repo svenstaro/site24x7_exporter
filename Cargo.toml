@@ -10,6 +10,7 @@ publish = false
 
 [profile.release]
 lto = true
+codegen-units = 1
 
 [dependencies]
 dotenv = { version = "0.15.0" }
