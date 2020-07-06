@@ -69,11 +69,11 @@ In order to get your permanent refresh token, prepare a new file `curl-secrets` 
     client_secret=your-client-secret&
     code=your-temporary-code&
     grant_type=authorization_code
-    
+
 and then run this curl:
 
     curl https://accounts.zoho.eu/oauth/v2/token -X POST @curl-secrets
-    
+
 We use the `curl-secrets` file for security purposes so that your secrets won't be temporarily visible to all users
 in a multiuser system.
 
@@ -146,8 +146,7 @@ The limit seems to be around 70000 per day so polling every 5 seconds should be 
 
 In order to release this, do:
 
-- Increase version number in `Cargo.toml`
-- `cargo build`
-- Prepare `CHANGELOG.md` in keepachangelog.com format
-- `git commit -am <version>`
-- `git tag -sm <version> <version>`
+- `cargo release --dry-run`
+- `cargo release`
+- Releases will automatically be deployed by Github Actions.
+- Docker images will automatically be built by Docker Hub.
