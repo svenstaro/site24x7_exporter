@@ -20,7 +20,7 @@ It also supports monitor groups and exposes them via tags.
 ## CLI usage
 
 ```
-site24x7_exporter 0.2.2
+site24x7_exporter 0.3.0
 Sven-Hendrik Haase <svenstaro@gmail.com>
 A Prometheus compatible exporter for site24x7.com
 

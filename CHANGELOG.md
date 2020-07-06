@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [0.3.0] - 2020-07-06
 - Use more robust way of getting and holding access token.
 
 ## [0.2.2] - 2020-07-04
@@ -24,7 +26,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial working version.
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/0.2.2...HEAD
+[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/svenstaro/site24x7_exporter/compare/0.2.2...v0.3.0
 [0.2.2]: https://github.com/svenstaro/site24x7_exporter/compare/0.2.1...0.2.2
 [0.2.1]: https://github.com/svenstaro/site24x7_exporter/compare/0.2.0...0.2.1
 [0.2.0]: https://github.com/svenstaro/site24x7_exporter/compare/0.2.0...0.2.0
