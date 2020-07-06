@@ -6,6 +6,7 @@ description = "A Prometheus compatible exporter for site24x7.com"
 edition = "2018"
 license = "MIT"
 repository = "https://github.com/svenstaro/site24x7_exporter"
+publish = false
 
 [profile.release]
 lto = true
