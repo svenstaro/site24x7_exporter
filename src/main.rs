@@ -7,7 +7,9 @@ use log::{debug, error, info};
 use prometheus::{Encoder, GaugeVec, IntGaugeVec, TextEncoder};
 use simplelog::{LevelFilter, TermLogger};
 use std::net::SocketAddr;
+use std::sync::Arc;
 use structopt::StructOpt;
+use tokio::sync::RwLock;
 
 mod site24x7_types;
 mod zoho_types;
@@ -219,23 +221,26 @@ async fn hyper_service(
     req: Request<Body>,
     site24x7_client_info: &site24x7_types::Site24x7ClientInfo,
     refresh_token: &str,
-    access_token: &str,
+    access_token: Arc<RwLock<String>>,
     metrics_path: &str,
 ) -> Result<Response<Body>, hyper::error::Error> {
-    let mut access_token = access_token.to_owned();
-
     if req.method() != Method::GET || req.uri().path() != metrics_path {
         return Ok(Response::new(
             format!("site24x7_exporter\n\nTry {}", metrics_path).into(),
         ));
     }
 
-    let current_status = fetch_current_status(
-        &CLIENT,
-        &site24x7_client_info.site24x7_endpoint,
-        &access_token,
-    )
-    .await;
+    let current_status;
+    {
+        let access_token_read = access_token.read().await;
+
+        current_status = fetch_current_status(
+            &CLIENT,
+            &site24x7_client_info.site24x7_endpoint,
+            &access_token_read,
+        )
+        .await;
+    }
 
     let current_status_data = match current_status {
         Ok(ref current_status_data) => {
@@ -253,11 +258,13 @@ async fn hyper_service(
                 "Couldn't get status update due to an authentication error. \
                 Probably the access token has timed out. Trying to get a new one."
             );
+            let mut access_token_write = access_token.write().await;
             let access_token_res =
                 get_access_token(&CLIENT, &site24x7_client_info, &refresh_token).await;
-            access_token = match access_token_res {
+            *access_token_write = match access_token_res {
                 Ok(access_token) => access_token,
                 Err(e) => {
+                    error!("Failed to renew access token");
                     error!("{:?}", e);
                     return Ok(Response::builder()
                         .status(StatusCode::INTERNAL_SERVER_ERROR)
@@ -269,12 +276,13 @@ async fn hyper_service(
             match fetch_current_status(
                 &CLIENT,
                 &site24x7_client_info.site24x7_endpoint,
-                &access_token,
+                &access_token_write,
             )
             .await
             {
                 Ok(current_status_data) => current_status_data,
                 Err(e) => {
+                    error!("An unexpected error occurred after renewing access token.");
                     error!("{:?}", e);
                     return Ok(Response::builder()
                         .status(StatusCode::INTERNAL_SERVER_ERROR)
@@ -284,6 +292,7 @@ async fn hyper_service(
             }
         }
         Err(e) => {
+            error!("An unexpected error occurred.");
             error!("{:?}", e);
             return Ok(Response::builder()
                 .status(StatusCode::INTERNAL_SERVER_ERROR)
@@ -377,7 +386,9 @@ async fn main() -> Result<()> {
 
     // An access token is only available for a period of time.
     // We sometimes have to refresh it.
-    let access_token = get_access_token(&CLIENT, &site24x7_client_info, &refresh_token).await?;
+    let access_token = Arc::new(RwLock::new(
+        get_access_token(&CLIENT, &site24x7_client_info, &refresh_token).await?,
+    ));
 
     let metrics_path = args.metrics_path.to_string();
     let make_service = make_service_fn(move |_conn| {
@@ -396,7 +407,7 @@ async fn main() -> Result<()> {
                         req,
                         &site24x7_client_info,
                         &refresh_token,
-                        &access_token,
+                        access_token,
                         &metrics_path,
                     )
                     .await
