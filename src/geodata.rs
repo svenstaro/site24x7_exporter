@@ -55,7 +55,7 @@ pub fn get_geo_location_info() -> Vec<GeoLocationInfo> {
         },
         GeoLocationInfo {
             key: "Sydney - AUS",
-            name: "Shenzhen - CHN",
+            name: "Sydney - AUS",
             latitude: "-33.886836",
             longitude: "151.159892",
         },
