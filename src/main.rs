@@ -11,6 +11,7 @@ use std::sync::Arc;
 use structopt::StructOpt;
 use tokio::sync::RwLock;
 
+mod geodata;
 mod site24x7_types;
 mod zoho_types;
 
@@ -50,6 +51,10 @@ pub struct Config {
     /// Path under which to expose metrics
     #[structopt(long = "web.telemetry-path", default_value = "/metrics")]
     pub metrics_path: PathAndQuery,
+
+    /// Path under which to expose geolocation information
+    #[structopt(long = "web.geolocation-path", default_value = "/geolocation")]
+    pub geolocation_path: PathAndQuery,
 
     /// Only log messages with the given severity or above
     #[structopt(
@@ -223,12 +228,25 @@ async fn hyper_service(
     refresh_token: &str,
     access_token: Arc<RwLock<String>>,
     metrics_path: &str,
+    geolocation_path: &str,
 ) -> Result<Response<Body>, hyper::error::Error> {
+    // Serve geolocation data.
+    if req.method() == Method::GET && req.uri().path() == geolocation_path {
+        return Ok(Response::builder()
+            .header("Content-Type", "application/json")
+            .body(Body::from(
+                serde_json::to_string_pretty(&geodata::get_geo_location_info()).unwrap(),
+            ))
+            .unwrap());
+    }
+
+    // Serve default path.
     if req.method() != Method::GET || req.uri().path() != metrics_path {
         return Ok(Response::new(
             format!("site24x7_exporter\n\nTry {}", metrics_path).into(),
         ));
     }
+
 
     let current_status;
     {
@@ -391,17 +409,20 @@ async fn main() -> Result<()> {
     ));
 
     let metrics_path = args.metrics_path.to_string();
+    let geolocation_path = args.geolocation_path.to_string();
     let make_service = make_service_fn(move |_conn| {
         let site24x7_client_info = site24x7_client_info.clone();
         let refresh_token = refresh_token.clone();
         let access_token = access_token.clone();
         let metrics_path = metrics_path.clone();
+        let geolocation_path = geolocation_path.clone();
         async move {
             Ok::<_, hyper::Error>(service_fn(move |req| {
                 let site24x7_client_info = site24x7_client_info.clone();
                 let refresh_token = refresh_token.clone();
                 let access_token = access_token.clone();
                 let metrics_path = metrics_path.clone();
+                let geolocation_path = geolocation_path.clone();
                 async move {
                     hyper_service(
                         req,
@@ -409,6 +430,7 @@ async fn main() -> Result<()> {
                         &refresh_token,
                         access_token,
                         &metrics_path,
+                        &geolocation_path,
                     )
                     .await
                 }

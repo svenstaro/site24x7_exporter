@@ -17,6 +17,12 @@ This exporter currently supports these monitor types:
 
 It also supports monitor groups and exposes them via tags.
 
+There is a special path (default at `/geolocation`) which exposes geolocation information
+with keys that reflect the names of the locations as provided by the site24x7 API.
+This allows you to easily visualize locations on a map, for instance.
+The list of locations is currently highly incomplete and only serves my purposes.
+Pull requests welcome!
+
 ## CLI usage
 
 ```
@@ -32,6 +38,9 @@ FLAGS:
     -V, --version    Prints version information
 
 OPTIONS:
+        --web.geolocation-path <geolocation-path>
+            Path under which to expose geolocation info as JSON [default: /geolocation]
+
         --web.listen-address <listen-address>
             Address on which to expose metrics and web interface [default: 0.0.0.0:9803]
 
