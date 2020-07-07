@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [0.4.1] - 2020-07-07
 - Fix datatypes of geolocations for Grafana compatibility
 
 ## [0.4.0] - 2020-07-07
@@ -30,7 +32,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial working version.
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v0.4.0...HEAD
+[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v0.4.1...HEAD
+[0.4.1]: https://github.com/svenstaro/site24x7_exporter/compare/v0.4.0...v0.4.1
 [0.4.0]: https://github.com/svenstaro/site24x7_exporter/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/svenstaro/site24x7_exporter/compare/0.2.2...v0.3.0
 [0.2.2]: https://github.com/svenstaro/site24x7_exporter/compare/0.2.1...0.2.2
