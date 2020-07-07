@@ -247,7 +247,6 @@ async fn hyper_service(
         ));
     }
 
-
     let current_status;
     {
         let access_token_read = access_token.read().await;
