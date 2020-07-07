@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Fix datatypes of geolocations for Grafana compatibility
 
 ## [0.4.0] - 2020-07-07
 - Add separate route to expose geographic information about the locations.
