@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Better logging
 
 ## [0.4.1] - 2020-07-07
 - Fix datatypes of geolocations for Grafana compatibility

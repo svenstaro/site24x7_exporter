@@ -9,7 +9,7 @@ pub struct GeoLocationInfo {
 }
 
 /// Initialize a big static list of gep
-pub fn get_geo_location_info() -> Vec<GeoLocationInfo> {
+pub fn get_geolocation_info() -> Vec<GeoLocationInfo> {
     vec![
         GeoLocationInfo {
             key: "Falkenstein - DE",

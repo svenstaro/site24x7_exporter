@@ -233,21 +233,24 @@ async fn hyper_service(
 ) -> Result<Response<Body>, hyper::error::Error> {
     // Serve geolocation data.
     if req.method() == Method::GET && req.uri().path() == geolocation_path {
+        info!("Serving geolocation info");
         return Ok(Response::builder()
             .header("Content-Type", "application/json")
             .body(Body::from(
-                serde_json::to_string_pretty(&geodata::get_geo_location_info()).unwrap(),
+                serde_json::to_string_pretty(&geodata::get_geolocation_info()).unwrap(),
             ))
             .unwrap());
     }
 
     // Serve default path.
     if req.method() != Method::GET || req.uri().path() != metrics_path {
+        info!("Serving default path");
         return Ok(Response::new(
             format!("site24x7_exporter\n\nTry {}", metrics_path).into(),
         ));
     }
 
+    info!("Serving metrics");
     let current_status;
     {
         let access_token_read = access_token.read().await;
