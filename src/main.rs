@@ -8,8 +8,8 @@ use prometheus::{Encoder, GaugeVec, IntGaugeVec, TextEncoder};
 use simplelog::{LevelFilter, TermLogger};
 use std::net::SocketAddr;
 use std::sync::Arc;
-use structopt::StructOpt;
 use structopt::clap::{crate_name, crate_version};
+use structopt::StructOpt;
 use tokio::sync::RwLock;
 
 mod geodata;
