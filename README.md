@@ -11,9 +11,9 @@ A Prometheus compatible exporter for site24x7.com
 
 This exporter currently supports these monitor types:
 
-- URL "Website"
-- HOMEPAGE "Web Page Speed (Browser)"
-- REALBROWSER "Web Transaction (Browser)"
+- URL ["Website"](https://www.site24x7.com/help/admin/adding-a-monitor/website-monitoring.html)
+- HOMEPAGE ["Web Page Speed (Browser)"](https://www.site24x7.com/help/admin/adding-a-monitor/web-page-analyzer.html)
+- REALBROWSER ["Web Transaction (Browser)"](https://www.site24x7.com/help/admin/adding-a-monitor/webapplication-monitoring-realbrowser.html)
 
 It also supports monitor groups and exposes them via tags.
 
