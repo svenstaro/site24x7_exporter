@@ -9,6 +9,7 @@ use simplelog::{LevelFilter, TermLogger};
 use std::net::SocketAddr;
 use std::sync::Arc;
 use structopt::StructOpt;
+use structopt::clap::{crate_name, crate_version};
 use tokio::sync::RwLock;
 
 mod geodata;
@@ -356,6 +357,8 @@ async fn main() -> Result<()> {
     )?;
 
     dotenv::dotenv().ok();
+
+    info!("{} {}", crate_name!(), crate_version!());
 
     let client_id = std::env::var("ZOHO_CLIENT_ID").context("ZOHO_CLIENT_ID must be set")?;
     let client_secret =
