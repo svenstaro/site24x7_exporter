@@ -236,6 +236,7 @@ async fn hyper_service(
         info!("Serving geolocation info");
         return Ok(Response::builder()
             .header("Content-Type", "application/json")
+            .header("Access-Control-Allow-Origin", "*")
             .body(Body::from(
                 serde_json::to_string_pretty(&geodata::get_geolocation_info()).unwrap(),
             ))
