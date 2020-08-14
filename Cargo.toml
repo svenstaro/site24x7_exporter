@@ -1,6 +1,6 @@
 [package]
 name = "site24x7_exporter"
-version = "0.4.4"
+version = "0.4.5-alpha.0"
 authors = ["Sven-Hendrik Haase <svenstaro@gmail.com>"]
 description = "A Prometheus compatible exporter for site24x7.com"
 edition = "2018"
