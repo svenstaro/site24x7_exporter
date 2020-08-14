@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Add more city locations
+- Update deps
 
 ## [0.4.3] - 2020-07-08
 - Add CORS headers to geolocation lookup route

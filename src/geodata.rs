@@ -59,5 +59,53 @@ pub fn get_geolocation_info() -> Vec<GeoLocationInfo> {
             latitude: -33.886836,
             longitude: 151.159892,
         },
+        GeoLocationInfo {
+            key: "Beijing - CHN",
+            name: "Beijing - CHN",
+            latitude: 39.918722,
+            longitude: 116.390186,
+        },
+        GeoLocationInfo {
+            key: "Chengdu - CHN",
+            name: "Chengdu - CHN",
+            latitude: 30.661116,
+            longitude: 104.068254,
+        },
+        GeoLocationInfo {
+            key: "Chongqing - CHN",
+            name: "Chongqing - CHN",
+            latitude: 29.558157,
+            longitude: 106.559216,
+        },
+        GeoLocationInfo {
+            key: "Guangzhou - CHN",
+            name: "Guangzhou - CHN",
+            latitude: 23.125833,
+            longitude: 113.259865,
+        },
+        GeoLocationInfo {
+            key: "Hong Kong - HK",
+            name: "Hong Kong - HK",
+            latitude: 22.324494,
+            longitude: 114.169539,
+        },
+        GeoLocationInfo {
+            key: "Johannesburg - ZA",
+            name: "Johannesburg - ZA",
+            latitude: -26.202477,
+            longitude: 28.047010,
+        },
+        GeoLocationInfo {
+            key: "Singapore - SG",
+            name: "Singapore - SG",
+            latitude: 1.333914,
+            longitude: 103.844230,
+        },
+        GeoLocationInfo {
+            key: "Taipei - TW",
+            name: "Taipei - TW",
+            latitude: 25.020797,
+            longitude: 121.464569,
+        },
     ]
 }
