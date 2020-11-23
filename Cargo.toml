@@ -29,6 +29,6 @@ serde_path_to_error = "0.1"
 tokio = { version = "0.3", features = ["full"] }
 hyper = "0.13"
 lazy_static = "1.0"
-strum = "0.19"
+strum = "0.20"
 strum_macros = "0.20"
 regex = "1"
