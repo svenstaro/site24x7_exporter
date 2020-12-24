@@ -230,7 +230,7 @@ async fn hyper_service(
     access_token: Arc<RwLock<String>>,
     metrics_path: &str,
     geolocation_path: &str,
-) -> Result<Response<Body>, hyper::error::Error> {
+) -> Result<Response<Body>, hyper::Error> {
     // Serve geolocation data.
     if req.method() == Method::GET && req.uri().path() == geolocation_path {
         info!("Serving geolocation info");
