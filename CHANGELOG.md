@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Upgrade all deps to tokio 1.0
 
 ## [0.4.4] - 2020-08-14
 - Add more city locations
