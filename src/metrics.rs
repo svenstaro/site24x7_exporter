@@ -1,7 +1,7 @@
 //! Module containing functions related to handling metrics.
 use std::collections::HashMap;
 
-use log::debug;
+use log::{debug, info};
 use prometheus::proto::MetricFamily;
 
 use crate::{
@@ -23,23 +23,20 @@ fn set_metrics_for_monitors(monitors: &[site24x7_types::MonitorMaybe], monitor_g
         };
         for location in &monitor.locations {
             debug!(
-                "Setting MONITOR_UP_GAUGE with {{monitor_type=\"{}\", \
-                        monitor_name=\"{}\", monitor_group=\"{}\", location=\"{}\"}} \
-                        to {}",
+                "Setting site24x7_monitor_up{{monitor_type=\"{}\",monitor_name=\"{}\",monitor_group=\"{}\",location=\"{}\"}} {}",
                 &monitor_type,
                 &monitor.name,
                 &monitor_group,
                 &location.location_name,
                 location.clone().status as i64
             );
-            MONITOR_UP_GAUGE
-                .with_label_values(&[
-                    &monitor_type,
-                    &monitor.name,
-                    &monitor_group,
-                    &location.location_name,
-                ])
-                .set(location.clone().status as i64);
+            let up_gauge = MONITOR_UP_GAUGE.with_label_values(&[
+                &monitor_type,
+                &monitor.name,
+                &monitor_group,
+                &location.location_name,
+            ]);
+            up_gauge.set(location.clone().status as i64);
 
             // There is a special case where sometimes locations don't report an
             // `attribute_value` even though they are up. This appears to happen
@@ -66,16 +63,49 @@ fn set_metrics_for_monitors(monitors: &[site24x7_types::MonitorMaybe], monitor_g
             } else {
                 0.0
             };
-            MONITOR_LATENCY_SECONDS_GAUGE
-                .with_label_values(&[
-                    &monitor_type,
-                    &monitor.name,
-                    &monitor_group,
-                    &location.location_name,
-                ])
-                .set(attribute_value);
+            debug!(
+                "Setting site24x7_monitor_latency_seconds{{monitor_type=\"{}\",monitor_name=\"{}\",monitor_group=\"{}\",location=\"{}\"}} {}",
+                &monitor_type,
+                &monitor.name,
+                &monitor_group,
+                &location.location_name,
+                attribute_value,
+            );
+            let latency_gauge = MONITOR_LATENCY_SECONDS_GAUGE.with_label_values(&[
+                &monitor_type,
+                &monitor.name,
+                &monitor_group,
+                &location.location_name,
+            ]);
+            latency_gauge.set(attribute_value);
         }
     }
+}
+
+/// Return whether `monitors` contains a monitor having given attributes.
+fn has_monitor_with_label_values(
+    monitors: &[site24x7_types::MonitorMaybe],
+    monitor_type: &str,
+    monitor_name: &str,
+    location_name: &str,
+) -> bool {
+    for monitor_maybe in monitors {
+        let monitor = match monitor_maybe {
+            site24x7_types::MonitorMaybe::URL(m)
+            | site24x7_types::MonitorMaybe::HOMEPAGE(m)
+            | site24x7_types::MonitorMaybe::REALBROWSER(m) => m,
+            site24x7_types::MonitorMaybe::Unknown => continue,
+        };
+        for location in &monitor.locations {
+            if monitor_type == monitor_maybe.to_string()
+                && monitor_name == monitor.name
+                && location_name == location.location_name
+            {
+                return true;
+            }
+        }
+    }
+    false
 }
 
 /// Clean up metrics that were deleted or somehow became invalid.
@@ -86,6 +116,16 @@ fn cleanup_metrics_for_monitors(
 ) {
     for metric_family in metric_families {
         for metric in metric_family.get_metric() {
+            // Skip any metrics that are not in the given `monitor_group`.
+            let current_monitor_group = metric
+                .get_label()
+                .iter()
+                .find(|l| l.get_name() == "monitor_group")
+                .unwrap()
+                .get_value();
+            if current_monitor_group != monitor_group {
+                continue;
+            }
             let monitor_type = metric
                 .get_label()
                 .iter()
@@ -111,39 +151,25 @@ fn cleanup_metrics_for_monitors(
                 labels.insert("monitor_group", monitor_group);
                 labels.insert("location", location_name);
                 if metric_family.get_name() == "site24x7_monitor_up" {
+                    info!("Cleaning up now-missing metric site24x7_monitor_up{{monitor_type=\"{}\",monitor_name=\"{}\",monitor_group=\"{}\",location=\"{}\"}}",
+                        monitor_type,
+                        monitor_name,
+                        monitor_group,
+                        location_name,
+                    );
                     MONITOR_UP_GAUGE.remove(&labels).unwrap();
                 } else if metric_family.get_name() == "site24x7_monitor_latency_seconds" {
+                    info!("Cleaning up now-missing metric site24x7_monitor_latency_seconds{{monitor_type=\"{}\",monitor_name=\"{}\",monitor_group=\"{}\",location=\"{}\"}}",
+                        monitor_type,
+                        monitor_name,
+                        monitor_group,
+                        location_name,
+                    );
                     MONITOR_LATENCY_SECONDS_GAUGE.remove(&labels).unwrap();
                 }
             }
         }
     }
-}
-
-/// Return whether `monitors` contains a monitor having given attributes.
-fn has_monitor_with_label_values(
-    monitors: &[site24x7_types::MonitorMaybe],
-    monitor_type: &str,
-    monitor_name: &str,
-    location_name: &str,
-) -> bool {
-    for monitor_maybe in monitors {
-        let monitor = match monitor_maybe {
-            site24x7_types::MonitorMaybe::URL(m)
-            | site24x7_types::MonitorMaybe::HOMEPAGE(m)
-            | site24x7_types::MonitorMaybe::REALBROWSER(m) => m,
-            site24x7_types::MonitorMaybe::Unknown => continue,
-        };
-        for location in &monitor.locations {
-            if monitor_type == monitor_maybe.to_string()
-                && monitor_name == &monitor.name
-                && location_name == &location.location_name
-            {
-                return true;
-            }
-        }
-    }
-    false
 }
 
 /// Update metrics based on previously gathered data from /current_status API.
@@ -173,10 +199,19 @@ pub fn update_metrics_from_current_status(current_status_data: &CurrentStatusDat
 mod tests {
     use anyhow::Result;
     use pretty_assertions::assert_eq;
+    use prometheus::{Encoder, TextEncoder};
 
     use crate::parsing::parse_current_status;
 
     use super::*;
+
+    /// Since we're using the global exporter, tests can influence and will influence eachother via
+    /// global state. We'll therefore have to call this function before every test to make sure we
+    /// start with a clean slate.
+    fn clear_state() {
+        MONITOR_UP_GAUGE.reset();
+        MONITOR_LATENCY_SECONDS_GAUGE.reset();
+    }
 
     /// Return whether `metric_name` has a label `label_name` having `label_value` in a list `metric_families`.
     fn has_label_with_value(
@@ -206,6 +241,7 @@ mod tests {
     #[test]
     /// If we get an entirely empty body, we don't want to see any metrics getting created.
     fn no_metrics_are_created_if_empty_body() -> Result<()> {
+        clear_state();
         let data = parse_current_status(include_str!("../tests/data/empty_response.json"))?;
         update_metrics_from_current_status(&data);
         assert!(prometheus::gather().is_empty());
@@ -215,6 +251,7 @@ mod tests {
     #[test]
     /// A simple case where we expect to find two locations in the output.
     fn simple_two_locations() -> Result<()> {
+        clear_state();
         let data = parse_current_status(include_str!("../tests/data/simple_two_locations.json"))?;
         update_metrics_from_current_status(&data);
         assert_eq!(
@@ -247,6 +284,7 @@ mod tests {
     #[test]
     /// A removed location should disappear.
     fn removed_location_should_disappear() -> Result<()> {
+        clear_state();
         let data_before =
             parse_current_status(include_str!("../tests/data/simple_two_locations.json"))?;
         let data_after =
@@ -278,6 +316,7 @@ mod tests {
     #[test]
     /// A removed monitor should disappear.
     fn removed_monitors_should_disappear() -> Result<()> {
+        clear_state();
         let data_before =
             parse_current_status(include_str!("../tests/data/simple_two_monitors.json"))?;
         let data_after =
@@ -314,6 +353,7 @@ mod tests {
     /// which will cause it to not report an `attribute_value`.
     /// It's better to keep the old value in that case.
     fn keep_old_value_if_update_is_invalid() -> Result<()> {
+        clear_state();
         let data_before =
             parse_current_status(include_str!("../tests/data/simple_two_locations.json"))?;
         let data_after =
@@ -347,6 +387,7 @@ mod tests {
     ///
     /// See https://prometheus.io/docs/practices/instrumentation/#avoid-missing-metrics
     fn report_nan_for_down_monitor() -> Result<()> {
+        clear_state();
         let data = parse_current_status(include_str!("../tests/data/down_monitor.json"))?;
         update_metrics_from_current_status(&data);
         assert_eq!(
@@ -360,6 +401,24 @@ mod tests {
             .get()
             .is_nan());
 
+        Ok(())
+    }
+
+    #[test]
+    /// Check that there are no changes between two identical status updates.
+    fn identical_update_no_changes() -> Result<()> {
+        clear_state();
+        let s = include_str!("../tests/data/full.json");
+        let data = parse_current_status(s)?;
+        update_metrics_from_current_status(&data);
+        let mut before = vec![];
+        let encoder = TextEncoder::new();
+        encoder.encode(&prometheus::gather(), &mut before).unwrap();
+        update_metrics_from_current_status(&data);
+        let mut after = vec![];
+        let encoder = TextEncoder::new();
+        encoder.encode(&prometheus::gather(), &mut after).unwrap();
+        assert_eq!(before, after);
         Ok(())
     }
 }
