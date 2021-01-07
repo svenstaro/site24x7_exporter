@@ -56,10 +56,10 @@ fn set_metrics_for_monitors(monitors: &[site24x7_types::MonitorMaybe], monitor_g
             let attribute_value = if let Some(attribute_value) = location.attribute_value {
                 attribute_value as f64 / 1000.0
             } else if location.status != site24x7_types::Status::Up {
-                // We'll report NaN instead of 0 if the monitor is down as a latency of 0 might
+                // We'll report +Inf instead of 0 if the monitor is down as a latency of 0 might
                 // be misleading.
                 // See https://prometheus.io/docs/practices/instrumentation/#avoid-missing-metrics
-                f64::NAN
+                f64::INFINITY
             } else {
                 0.0
             };
@@ -383,10 +383,10 @@ mod tests {
     }
 
     #[test]
-    /// Monitors that are down should report NaN as their latency value.
+    /// Monitors that are down should report +Inf as their latency value.
     ///
     /// See https://prometheus.io/docs/practices/instrumentation/#avoid-missing-metrics
-    fn report_nan_for_down_monitor() -> Result<()> {
+    fn report_inf_for_down_monitor() -> Result<()> {
         clear_state();
         let data = parse_current_status(include_str!("../tests/data/down_monitor.json"))?;
         update_metrics_from_current_status(&data);
@@ -399,7 +399,7 @@ mod tests {
         assert!(MONITOR_LATENCY_SECONDS_GAUGE
             .with_label_values(&["URL", "test", "", "Bucharest - RO"])
             .get()
-            .is_nan());
+            .is_infinite());
 
         Ok(())
     }

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Change value for monitor that are down to +Infinity
 
 ## [0.5.0] - 2021-01-07
 - Upgrade all deps to tokio 1.0
