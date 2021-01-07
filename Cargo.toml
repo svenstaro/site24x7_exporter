@@ -2,7 +2,7 @@
 name = "site24x7_exporter"
 version = "0.4.5-alpha.0"
 authors = ["Sven-Hendrik Haase <svenstaro@gmail.com>"]
-description = "A Prometheus compatible exporter for site24x7.com"
+description = "A Prometheus compatible exporter for site24x7"
 edition = "2018"
 license = "MIT"
 repository = "https://github.com/svenstaro/site24x7_exporter"
@@ -13,7 +13,7 @@ lto = true
 codegen-units = 1
 
 [dependencies]
-dotenv = { version = "0.15.0" }
+dotenv = "0.15.0"
 reqwest = { version = "0.11", features = ["json", "rustls-tls"], default-features = false }
 prometheus = "0.11"
 structopt = "0.3"
@@ -32,3 +32,5 @@ lazy_static = "1.0"
 strum = "0.20"
 strum_macros = "0.20"
 regex = "1"
+chrono = { version = "0.4", features = ["serde"] }
+pretty_assertions = "0.6"

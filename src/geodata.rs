@@ -1,3 +1,4 @@
+//! Geolocation data related to the Site24x7 locations.
 use serde::Serialize;
 
 #[derive(Debug, Serialize)]

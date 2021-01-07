@@ -1,0 +1,167 @@
+{
+  "code": 0,
+  "data": {
+    "monitor_groups": [
+      {
+        "group_id": "01",
+        "group_name": "production",
+        "monitors": [
+          {
+            "attributeName": "TRANSACTIONTIME",
+            "attribute_key": "transaction_time",
+            "attribute_label": "Transaction Time",
+            "attribute_value": 27458,
+            "down_reason": "some test reason",
+            "downtime_millis": "1818617",
+            "duration": "30 Mins 18 Secs",
+            "last_polled_time": "2021-01-06T18:27:41+0000",
+            "locations": [
+              {
+                "attribute_value": 27458,
+                "last_polled_time": "2021-01-06T18:27:41+0000",
+                "location_name": "Falkenstein - DE",
+                "primary_location": true,
+                "status": 1
+              },
+              {
+                "attribute_value": "-",
+                "last_polled_time": "2021-01-06T18:27:41+0000",
+                "location_name": "Shenzhen - CHN",
+                "status": 0
+              }
+            ],
+            "monitor_id": "0101",
+            "monitor_type": "REALBROWSER",
+            "name": "production (realbrowser)",
+            "outage_id": "01",
+            "status": 0,
+            "unit": "ms"
+          },
+          {
+            "attributeName": "RESPONSETIME",
+            "attribute_key": "response_time",
+            "attribute_label": "Page Load Time",
+            "attribute_value": 718,
+            "last_polled_time": "2021-01-06T17:44:10+0000",
+            "locations": [
+              {
+                "attribute_value": 718,
+                "last_polled_time": "2021-01-06T17:44:10+0000",
+                "location_name": "Falkenstein - DE",
+                "primary_location": true,
+                "status": 1
+              },
+              {
+                "attribute_value": 3830,
+                "last_polled_time": "2021-01-06T17:44:10+0000",
+                "location_name": "Shenzhen - CHN",
+                "status": 1
+              }
+            ],
+            "monitor_id": "0102",
+            "monitor_type": "HOMEPAGE",
+            "name": "production (homepage)",
+            "status": 1,
+            "unit": "ms"
+          },
+          {
+            "attributeName": "RESPONSETIME",
+            "attribute_key": "response_time",
+            "attribute_label": "Response Time",
+            "attribute_value": 173,
+            "last_polled_time": "2021-01-06T18:43:27+0000",
+            "locations": [
+              {
+                "attribute_value": 173,
+                "last_polled_time": "2021-01-06T18:43:27+0000",
+                "location_name": "Falkenstein - DE",
+                "primary_location": true,
+                "status": 1
+              },
+              {
+                "attribute_value": 2322,
+                "last_polled_time": "2021-01-06T18:42:16+0000",
+                "location_name": "Shenzhen - CHN",
+                "status": 1
+              }
+            ],
+            "monitor_id": "0103",
+            "monitor_type": "URL",
+            "name": "production (url)",
+            "status": 1,
+            "unit": "ms"
+          }
+        ],
+        "status": 0
+      },
+      {
+        "group_id": "02",
+        "group_name": "integration",
+        "monitors": [
+          {
+            "attributeName": "RESPONSETIME",
+            "attribute_key": "response_time",
+            "attribute_label": "Page Load Time",
+            "attribute_value": 1081,
+            "last_polled_time": "2021-01-06T18:33:34+0000",
+            "locations": [
+              {
+                "attribute_value": 1081,
+                "last_polled_time": "2021-01-06T18:33:34+0000",
+                "location_name": "Falkenstein - DE",
+                "primary_location": true,
+                "status": 1
+              },
+              {
+                "attribute_value": 13706,
+                "last_polled_time": "2021-01-06T18:18:31+0000",
+                "location_name": "Shenzhen - CHN",
+                "status": 1
+              }
+            ],
+            "monitor_id": "0201",
+            "monitor_type": "HOMEPAGE",
+            "name": "integration (homepage)",
+            "status": 1,
+            "tags": [
+              "test1",
+              "test2k:test2v",
+              "test3k:test3v:a:b"
+            ],
+            "unit": "ms"
+          }
+        ],
+        "status": 1
+      }
+    ],
+    "monitors": [
+      {
+        "attributeName": "RESPONSETIME",
+        "attribute_key": "response_time",
+        "attribute_label": "Response Time",
+        "attribute_value": 139,
+        "last_polled_time": "2021-01-06T18:41:53+0000",
+        "locations": [
+          {
+            "attribute_value": 1534,
+            "last_polled_time": "2021-01-06T18:26:31+0000",
+            "location_name": "Singapore - SG",
+            "status": 1
+          },
+          {
+            "attribute_value": 165,
+            "last_polled_time": "2021-01-06T18:26:31+0000",
+            "location_name": "London - UK",
+            "status": 1
+          }
+        ],
+        "monitor_id": "00",
+        "monitor_type": "URL",
+        "name": "separate monitor",
+        "status": 1,
+        "unit": "ms"
+      }
+    ]
+  },
+  "message": "success"
+}
