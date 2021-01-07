@@ -151,6 +151,12 @@ purposes except for local debugging.
 Make sure to not poll this too often as site24x7 has API usage limits per day.
 The limit seems to be around 70000 per day so polling every 5 seconds should be safe.
 
+## Running the tests
+
+If you want to run the test suite, you'll need to run it as
+
+    cargo test -- --test-threads 1 --nocapture
+
 ## Releasing
 
 In order to release this, do:

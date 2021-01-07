@@ -1,0 +1,24 @@
+{
+  "code": 0,
+  "data": {
+    "monitors": [
+      {
+        "attributeName": "RESPONSETIME",
+        "last_polled_time": "2021-01-06T18:53:07+0000",
+        "locations": [
+          {
+            "attribute_value": 757,
+            "last_polled_time": "2021-01-06T18:53:06+0000",
+            "location_name": "Bucharest - RO",
+            "status": 1
+          }
+        ],
+        "monitor_id": "01",
+        "monitor_type": "URL",
+        "name": "test",
+        "status": 1
+      }
+    ]
+  },
+  "message": "success"
+}

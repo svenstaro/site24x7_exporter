@@ -1,8 +1,11 @@
 //! Module containing Site24x7 API-specific types.
+use chrono::{DateTime, FixedOffset};
 use serde::{Deserialize, Deserializer};
 use serde_repr::Deserialize_repr;
 use strum_macros::Display;
 use thiserror::Error;
+
+pub static DATE_FORMAT: &str = "%Y-%m-%dT%H:%M:%S%.f%z";
 
 #[derive(Clone, Deserialize, Debug)]
 pub struct Site24x7ClientInfo {
@@ -30,7 +33,7 @@ pub struct CurrentStatusResponseInner {
     pub data: CurrentStatusData,
 }
 
-#[derive(Clone, Deserialize_repr, Debug)]
+#[derive(Clone, Deserialize_repr, Debug, PartialEq)]
 #[repr(u8)]
 pub enum Status {
     Down = 0,
@@ -51,7 +54,7 @@ impl Default for Status {
     }
 }
 
-#[derive(Clone, Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug, PartialEq)]
 pub struct CurrentStatusData {
     #[serde(default)]
     pub monitors: Vec<MonitorMaybe>,
@@ -74,29 +77,44 @@ pub enum CurrentStatusError {
     Other(#[from] anyhow::Error),
 }
 
-fn from_attribute_value<'de, D>(deserializer: D) -> Result<u64, D::Error>
+fn from_attribute_value<'de, D>(deserializer: D) -> Result<Option<u64>, D::Error>
 where
     D: Deserializer<'de>,
 {
     // Site24x7 sends "-" as the latency value in `attribute_value` for monitors
     // that are down. This is a bit weird but it's their way of saying that no
     // latency measurment is possible for a down host.
-    // We'll deal with this by sending 0 as that's what Prometheus recommends:
+    // TODO Move this comment somewhere where it makes sense.
+    // We'll deal with this by setting `NaN` as that's what Prometheus recommends:
     // https://prometheus.io/docs/practices/instrumentation/#avoid-missing-metrics
-    let v: u64 = Deserialize::deserialize(deserializer).unwrap_or(0);
+    let v: Option<u64> = Deserialize::deserialize(deserializer).ok();
     Ok(v)
 }
 
-#[derive(Clone, Deserialize, Debug)]
+fn from_custom_dateformat<'de, D>(deserializer: D) -> Result<Option<DateTime<FixedOffset>>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    // Site24x7 sends a slightly weird RFC3339-ish date which we'll need to parse.
+    let d: Option<String> = Option::deserialize(deserializer)?;
+    if let Some(d) = d {
+        return Ok(Some(DateTime::parse_from_str(&d, DATE_FORMAT).map_err(serde::de::Error::custom)?));
+    }
+    Ok(None)
+}
+
+#[derive(Clone, Deserialize, Debug, PartialEq)]
 pub struct Location {
     #[serde(default)]
     pub status: Status,
     #[serde(default, deserialize_with = "from_attribute_value")]
-    pub attribute_value: u64,
+    pub attribute_value: Option<u64>,
     pub location_name: String,
+    #[serde(default, deserialize_with = "from_custom_dateformat")]
+    pub last_polled_time: Option<DateTime<FixedOffset>>,
 }
 
-#[derive(Clone, Deserialize, Display, Debug)]
+#[derive(Clone, Deserialize, Display, Debug, PartialEq)]
 #[serde(tag = "monitor_type")]
 pub enum MonitorMaybe {
     URL(Monitor),
@@ -107,7 +125,7 @@ pub enum MonitorMaybe {
     Unknown,
 }
 
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct Tag {
     pub key: String,
     pub value: String,
@@ -129,7 +147,7 @@ impl<'de> Deserialize<'de> for Tag {
     }
 }
 
-#[derive(Clone, Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug, PartialEq)]
 pub struct Monitor {
     pub name: String,
     pub unit: Option<String>,
@@ -140,13 +158,15 @@ pub struct Monitor {
     pub attribute_name: String,
     // pub attribute_label: String,
     #[serde(default, deserialize_with = "from_attribute_value")]
-    pub attribute_value: u64,
+    pub attribute_value: Option<u64>,
     pub monitor_id: String,
     #[serde(default)]
     pub tags: Vec<Tag>,
+    #[serde(default, deserialize_with = "from_custom_dateformat")]
+    pub last_polled_time: Option<DateTime<FixedOffset>>,
 }
 
-#[derive(Clone, Deserialize, Debug)]
+#[derive(Clone, Deserialize, Debug, PartialEq)]
 pub struct MonitorGroup {
     #[serde(default)]
     pub monitors: Vec<MonitorMaybe>,
