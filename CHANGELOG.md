@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 - Upgrade all deps to tokio 1.0
+- Add proper tests (#74)
+- Report NaN as value for monitors that are down
+- Stop overwriting previous values with newer invalid values returned by Site24x7
 
 ## [0.4.4] - 2020-08-14
 - Add more city locations
