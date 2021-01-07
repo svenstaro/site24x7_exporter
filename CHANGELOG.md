@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [0.5.0] - 2021-01-07
 - Upgrade all deps to tokio 1.0
 - Add proper tests (#74)
 - Report NaN as value for monitors that are down
@@ -46,7 +48,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial working version.
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v0.4.4...HEAD
+[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v0.5.0...HEAD
+[0.5.0]: https://github.com/svenstaro/site24x7_exporter/compare/v0.4.4...v0.5.0
 [0.4.4]: https://github.com/svenstaro/site24x7_exporter/compare/v0.4.3...v0.4.4
 [0.4.3]: https://github.com/svenstaro/site24x7_exporter/compare/v0.4.2...v0.4.3
 [0.4.2]: https://github.com/svenstaro/site24x7_exporter/compare/v0.4.1...v0.4.2
