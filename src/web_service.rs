@@ -6,8 +6,8 @@ use log::{debug, error, info};
 use prometheus::{Encoder, TextEncoder};
 use tokio::sync::RwLock;
 
-use crate::metrics::update_metrics_from_current_status;
 use crate::api_communication::fetch_current_status;
+use crate::metrics::update_metrics_from_current_status;
 use crate::{api_communication::get_access_token, geodata, site24x7_types, CLIENT};
 
 pub async fn hyper_service(

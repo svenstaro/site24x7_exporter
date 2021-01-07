@@ -91,14 +91,18 @@ where
     Ok(v)
 }
 
-fn from_custom_dateformat<'de, D>(deserializer: D) -> Result<Option<DateTime<FixedOffset>>, D::Error>
+fn from_custom_dateformat<'de, D>(
+    deserializer: D,
+) -> Result<Option<DateTime<FixedOffset>>, D::Error>
 where
     D: Deserializer<'de>,
 {
     // Site24x7 sends a slightly weird RFC3339-ish date which we'll need to parse.
     let d: Option<String> = Option::deserialize(deserializer)?;
     if let Some(d) = d {
-        return Ok(Some(DateTime::parse_from_str(&d, DATE_FORMAT).map_err(serde::de::Error::custom)?));
+        return Ok(Some(
+            DateTime::parse_from_str(&d, DATE_FORMAT).map_err(serde::de::Error::custom)?,
+        ));
     }
     Ok(None)
 }

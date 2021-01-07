@@ -71,7 +71,7 @@ pub fn update_metrics_from_current_status(current_status_data: &CurrentStatusDat
 mod tests {
     use anyhow::Result;
     use pretty_assertions::assert_eq;
-    use prometheus::{core::Collector, proto::MetricFamily};
+    use prometheus::proto::MetricFamily;
 
     use crate::parsing::parse_current_status;
 

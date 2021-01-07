@@ -1,9 +1,9 @@
 //! This module contains functions for communicating with the Site24x7 and Zoho APIs.
 use anyhow::{anyhow, Context, Result};
-use log::{info, debug};
+use log::{debug, info};
 
-use crate::{site24x7_types, zoho_types};
 use crate::parsing::parse_current_status;
+use crate::{site24x7_types, zoho_types};
 
 /// Acquire the access token.
 ///

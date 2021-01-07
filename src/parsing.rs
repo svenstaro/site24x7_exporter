@@ -1,7 +1,6 @@
 //! Module containing functions related to parsing the Site24x7 API payload.
 use anyhow::{anyhow, Context, Result};
 use log::debug;
-use serde_json;
 
 use crate::site24x7_types as types;
 
