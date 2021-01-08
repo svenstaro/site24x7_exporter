@@ -405,6 +405,40 @@ mod tests {
     }
 
     #[test]
+    /// Monitors that are down will overwrite previous values with +Inf.
+    fn down_monitor_updates_previous_value_to_inf() -> Result<()> {
+        clear_state();
+        let before = parse_current_status(include_str!("../tests/data/simple_two_locations.json"))?;
+        let after = parse_current_status(include_str!("../tests/data/down_monitor.json"))?;
+        update_metrics_from_current_status(&before);
+        assert_eq!(
+            MONITOR_LATENCY_SECONDS_GAUGE
+                .with_label_values(&["URL", "test", "", "London - UK"])
+                .get(),
+            0.421
+        );
+        assert_eq!(
+            MONITOR_LATENCY_SECONDS_GAUGE
+                .with_label_values(&["URL", "test", "", "Bucharest - RO"])
+                .get(),
+            0.757
+        );
+        update_metrics_from_current_status(&after);
+        assert_eq!(
+            MONITOR_LATENCY_SECONDS_GAUGE
+                .with_label_values(&["URL", "test", "", "London - UK"])
+                .get(),
+            27.458
+        );
+        assert!(MONITOR_LATENCY_SECONDS_GAUGE
+            .with_label_values(&["URL", "test", "", "Bucharest - RO"])
+            .get()
+            .is_infinite());
+
+        Ok(())
+    }
+
+    #[test]
     /// Check that there are no changes between two identical status updates.
     fn identical_update_no_changes() -> Result<()> {
         clear_state();
