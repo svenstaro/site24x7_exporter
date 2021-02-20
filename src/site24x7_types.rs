@@ -120,13 +120,11 @@ pub struct Location {
 
 #[derive(Clone, Deserialize, Display, Debug, PartialEq)]
 #[serde(tag = "monitor_type")]
+#[allow(clippy::upper_case_acronyms)]
 pub enum MonitorMaybe {
-    #[serde(rename = "URL")]
-    Url(Monitor),
-    #[serde(rename = "HOMEPAGE")]
-    Homepage(Monitor),
-    #[serde(rename = "REALBROWSER")]
-    RealBrowser(Monitor),
+    URL(Monitor),
+    HOMEPAGE(Monitor),
+    REALBROWSER(Monitor),
     // SSL_CERT(Monitor),
     #[serde(other)]
     Unknown,

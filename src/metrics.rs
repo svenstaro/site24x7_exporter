@@ -16,9 +16,9 @@ fn set_metrics_for_monitors(monitors: &[site24x7_types::MonitorMaybe], monitor_g
     for monitor_maybe in monitors {
         let monitor_type = monitor_maybe.to_string();
         let monitor = match monitor_maybe {
-            site24x7_types::MonitorMaybe::Url(m)
-            | site24x7_types::MonitorMaybe::Homepage(m)
-            | site24x7_types::MonitorMaybe::RealBrowser(m) => m,
+            site24x7_types::MonitorMaybe::URL(m)
+            | site24x7_types::MonitorMaybe::HOMEPAGE(m)
+            | site24x7_types::MonitorMaybe::REALBROWSER(m) => m,
             site24x7_types::MonitorMaybe::Unknown => continue,
         };
         for location in &monitor.locations {
@@ -91,9 +91,9 @@ fn has_monitor_with_label_values(
 ) -> bool {
     for monitor_maybe in monitors {
         let monitor = match monitor_maybe {
-            site24x7_types::MonitorMaybe::Url(m)
-            | site24x7_types::MonitorMaybe::Homepage(m)
-            | site24x7_types::MonitorMaybe::RealBrowser(m) => m,
+            site24x7_types::MonitorMaybe::URL(m)
+            | site24x7_types::MonitorMaybe::HOMEPAGE(m)
+            | site24x7_types::MonitorMaybe::REALBROWSER(m) => m,
             site24x7_types::MonitorMaybe::Unknown => continue,
         };
         for location in &monitor.locations {
