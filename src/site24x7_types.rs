@@ -77,6 +77,7 @@ pub enum CurrentStatusError {
     Other(#[from] anyhow::Error),
 }
 
+#[allow(clippy::unnecessary_wraps)]
 fn from_attribute_value<'de, D>(deserializer: D) -> Result<Option<u64>, D::Error>
 where
     D: Deserializer<'de>,
@@ -84,7 +85,6 @@ where
     // Site24x7 sends "-" as the latency value in `attribute_value` for monitors
     // that are down. This is a bit weird but it's their way of saying that no
     // latency measurment is possible for a down host.
-    // TODO Move this comment somewhere where it makes sense.
     // We'll deal with this by setting `NaN` as that's what Prometheus recommends:
     // https://prometheus.io/docs/practices/instrumentation/#avoid-missing-metrics
     let v: Option<u64> = Deserialize::deserialize(deserializer).ok();
@@ -121,9 +121,12 @@ pub struct Location {
 #[derive(Clone, Deserialize, Display, Debug, PartialEq)]
 #[serde(tag = "monitor_type")]
 pub enum MonitorMaybe {
-    URL(Monitor),
-    HOMEPAGE(Monitor),
-    REALBROWSER(Monitor),
+    #[serde(rename = "URL")]
+    Url(Monitor),
+    #[serde(rename = "HOMEPAGE")]
+    Homepage(Monitor),
+    #[serde(rename = "REALBROWSER")]
+    RealBrowser(Monitor),
     // SSL_CERT(Monitor),
     #[serde(other)]
     Unknown,

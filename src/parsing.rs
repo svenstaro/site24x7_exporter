@@ -74,7 +74,7 @@ mod tests {
     fn partial_location_data() -> Result<()> {
         let s = include_str!("../tests/data/partial_location_data.json");
         let data = parse_current_status(s)?;
-        let expected_monitor = types::MonitorMaybe::URL(types::Monitor {
+        let expected_monitor = types::MonitorMaybe::Url(types::Monitor {
             name: "test".to_string(),
             unit: None,
             attribute_key: None,
@@ -122,7 +122,7 @@ mod tests {
     fn no_attribute_value_but_monitor_up() -> Result<()> {
         let s = include_str!("../tests/data/no_attribute_value.json");
         let data = parse_current_status(s)?;
-        let expected_monitor = types::MonitorMaybe::URL(types::Monitor {
+        let expected_monitor = types::MonitorMaybe::Url(types::Monitor {
             name: "test".to_string(),
             unit: None,
             attribute_key: None,
@@ -173,7 +173,7 @@ mod tests {
             group_id: "01".to_string(),
             group_name: "production".to_string(),
             monitors: vec![
-                types::MonitorMaybe::REALBROWSER(types::Monitor {
+                types::MonitorMaybe::RealBrowser(types::Monitor {
                     name: "production (realbrowser)".to_string(),
                     unit: Some("ms".to_string()),
                     attribute_key: Some("transaction_time".to_string()),
@@ -207,7 +207,7 @@ mod tests {
                         types::DATE_FORMAT,
                     )?),
                 }),
-                types::MonitorMaybe::HOMEPAGE(types::Monitor {
+                types::MonitorMaybe::Homepage(types::Monitor {
                     name: "production (homepage)".to_string(),
                     unit: Some("ms".to_string()),
                     attribute_key: Some("response_time".to_string()),
@@ -241,7 +241,7 @@ mod tests {
                         types::DATE_FORMAT,
                     )?),
                 }),
-                types::MonitorMaybe::URL(types::Monitor {
+                types::MonitorMaybe::Url(types::Monitor {
                     name: "production (url)".to_string(),
                     unit: Some("ms".to_string()),
                     attribute_key: Some("response_time".to_string()),
@@ -280,7 +280,7 @@ mod tests {
         let expected_monitor_group_int = types::MonitorGroup {
             group_id: "02".to_string(),
             group_name: "integration".to_string(),
-            monitors: vec![types::MonitorMaybe::HOMEPAGE(types::Monitor {
+            monitors: vec![types::MonitorMaybe::Homepage(types::Monitor {
                 name: "integration (homepage)".to_string(),
                 unit: Some("ms".to_string()),
                 attribute_key: Some("response_time".to_string()),
@@ -328,7 +328,7 @@ mod tests {
                 )?),
             })],
         };
-        let expected_monitor = types::MonitorMaybe::URL(types::Monitor {
+        let expected_monitor = types::MonitorMaybe::Url(types::Monitor {
             name: "separate monitor".to_string(),
             unit: Some("ms".to_string()),
             attribute_key: Some("response_time".to_string()),
