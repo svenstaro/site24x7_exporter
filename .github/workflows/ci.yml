@@ -48,7 +48,9 @@ jobs:
       - name: Run cargo-tarpaulin
         uses: actions-rs/tarpaulin@v0.1
         with:
-          args: '-- --test-threads 1'
+          # Force a full recompile for tarpaulin in order to not suffer from some weird error that occurs when we re-use
+          # the same target dir.
+          args: --target-dir /tmp -- --test-threads 1
         if: matrix.os == 'ubuntu-latest'
 
       - name: Upload coverage report to codecov.io
