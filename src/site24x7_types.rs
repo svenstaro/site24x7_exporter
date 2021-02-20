@@ -120,8 +120,8 @@ pub struct Location {
 
 #[derive(Clone, Deserialize, Display, Debug, PartialEq)]
 #[serde(tag = "monitor_type")]
-#[allow(unknown_lints)]
-#[allow(clippy::upper_case_acronyms)]
+// TODO Turn this on at some point once CI barfs
+// #[allow(clippy::upper_case_acronyms)]
 pub enum MonitorMaybe {
     URL(Monitor),
     HOMEPAGE(Monitor),
