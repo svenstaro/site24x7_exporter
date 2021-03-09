@@ -33,4 +33,4 @@ strum = "0.20"
 strum_macros = "0.20"
 regex = "1"
 chrono = { version = "0.4", features = ["serde"] }
-pretty_assertions = "0.6"
+pretty_assertions = "0.7"
