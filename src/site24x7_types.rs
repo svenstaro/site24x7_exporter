@@ -77,8 +77,6 @@ pub enum CurrentStatusError {
     Other(#[from] anyhow::Error),
 }
 
-// TODO Remove this soon once it's removed from clippy's default lint set again.
-#[allow(clippy::unnecessary_wraps)]
 fn from_attribute_value<'de, D>(deserializer: D) -> Result<Option<u64>, D::Error>
 where
     D: Deserializer<'de>,
@@ -121,8 +119,7 @@ pub struct Location {
 
 #[derive(Clone, Deserialize, Display, Debug, PartialEq)]
 #[serde(tag = "monitor_type")]
-// TODO Turn this on at some point once CI barfs
-// #[allow(clippy::upper_case_acronyms)]
+#[allow(clippy::upper_case_acronyms)]
 pub enum MonitorMaybe {
     URL(Monitor),
     HOMEPAGE(Monitor),
