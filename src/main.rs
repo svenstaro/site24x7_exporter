@@ -80,6 +80,7 @@ async fn main() -> Result<()> {
             .set_thread_level(simplelog::LevelFilter::Trace)
             .build(),
         simplelog::TerminalMode::Mixed,
+        simplelog::ColorChoice::Auto,
     )?;
 
     dotenv::dotenv().ok();
