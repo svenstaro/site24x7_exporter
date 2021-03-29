@@ -77,6 +77,8 @@ pub enum CurrentStatusError {
     Other(#[from] anyhow::Error),
 }
 
+// TODO Remove this soon once it's removed from clippy's default lint set again.
+#[allow(clippy::unnecessary_wraps)]
 fn from_attribute_value<'de, D>(deserializer: D) -> Result<Option<u64>, D::Error>
 where
     D: Deserializer<'de>,
