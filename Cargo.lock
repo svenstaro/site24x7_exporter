@@ -849,7 +849,7 @@ dependencies = [
 
 [[package]]
 name = "site24x7_exporter"
-version = "0.5.2-alpha.0"
+version = "0.5.2"
 dependencies = [
  "anyhow",
  "chrono",

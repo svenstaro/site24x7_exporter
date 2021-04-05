@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [0.5.2] - 2021-04-05
 - Use `www.` subdomain for querying API which should fix auth token errors in some circumstances (fixes [#3](https://github.com/svenstaro/site24x7_exporter/issues/3))
 
 ## [0.5.1] - 2021-01-08
@@ -52,7 +54,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial working version.
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v0.5.1...HEAD
+[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v0.5.2...HEAD
+[0.5.2]: https://github.com/svenstaro/site24x7_exporter/compare/v0.5.1...v0.5.2
 [0.5.1]: https://github.com/svenstaro/site24x7_exporter/compare/v0.5.0...v0.5.1
 [0.5.0]: https://github.com/svenstaro/site24x7_exporter/compare/v0.4.4...v0.5.0
 [0.4.4]: https://github.com/svenstaro/site24x7_exporter/compare/v0.4.3...v0.4.4

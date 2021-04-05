@@ -27,7 +27,7 @@ Pull requests welcome!
 ## CLI usage
 
 ```
-site24x7_exporter 0.5.1
+site24x7_exporter 0.5.2
 Sven-Hendrik Haase <svenstaro@gmail.com>
 A Prometheus compatible exporter for site24x7.com
 
