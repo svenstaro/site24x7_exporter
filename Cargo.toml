@@ -10,6 +10,7 @@ publish = false
 
 [profile.release]
 lto = true
+opt-level = 'z'
 codegen-units = 1
 
 [dependencies]
