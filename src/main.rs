@@ -94,7 +94,7 @@ async fn main() -> Result<()> {
         std::env::var("ZOHO_REFRESH_TOKEN").context("ZOHO_REFRESH_TOKEN must be set")?;
 
     let site24x7_client_info = site24x7_types::Site24x7ClientInfo {
-        site24x7_endpoint: format!("https://{}/api", args.site24x7_endpoint),
+        site24x7_endpoint: format!("https://www.{}/api", args.site24x7_endpoint),
         zoho_endpoint: format!(
             "https://accounts.zoho.{}",
             args.site24x7_endpoint.splitn(2, '.').last().unwrap()

@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Use `www.` subdomain for querying API which should fix auth token errors in some circumstances (fixes [#3](https://github.com/svenstaro/site24x7_exporter/issues/3))
 
 ## [0.5.1] - 2021-01-08
 - Change value for monitor that are down to +Infinity
