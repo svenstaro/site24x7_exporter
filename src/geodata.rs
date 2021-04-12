@@ -149,7 +149,7 @@ pub fn get_geolocation_info() -> Vec<GeoLocationInfo> {
             name: "Mumbai - IN",
             latitude: 19.07283,
             longitude: 72.88261,
-        },         
+        },
         GeoLocationInfo {
             key: "New York - US",
             name: "New York - US",
@@ -161,7 +161,7 @@ pub fn get_geolocation_info() -> Vec<GeoLocationInfo> {
             name: "Paris - FR",
             latitude: 48.85341,
             longitude: 2.3488,
-        },   
+        },
         GeoLocationInfo {
             key: "Rio de Janeiro - BR",
             name: "Rio de Janeiro - BR",
@@ -197,7 +197,7 @@ pub fn get_geolocation_info() -> Vec<GeoLocationInfo> {
             name: "Sydney - AUS",
             latitude: -33.886836,
             longitude: 151.159892,
-        },   
+        },
         GeoLocationInfo {
             key: "Taipei - TW",
             name: "Taipei - TW",
