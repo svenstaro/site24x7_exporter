@@ -6,7 +6,7 @@
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/svenstaro/site24x7_exporter/blob/master/LICENSE)
 [![Lines of Code](https://tokei.rs/b1/github/svenstaro/site24x7_exporter)](https://github.com/svenstaro/site24x7_exporter)
 
-A Prometheus compatible exporter for site24x7.com
+A Prometheus compatible exporter for [site24x7.com](https://www.site24x7.com/)
 
 ## Features
 
