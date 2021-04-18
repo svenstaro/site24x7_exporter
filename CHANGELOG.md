@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Add more locations to `/geolocation` endpoint [#111](https://github.com/svenstaro/site24x7_exporter/pull/111) (thanks @Whyeasy)
 
 ## [0.5.2] - 2021-04-05
 - Use `www.` subdomain for querying API which should fix auth token errors in some circumstances (fixes [#3](https://github.com/svenstaro/site24x7_exporter/issues/3))
