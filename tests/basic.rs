@@ -1,10 +1,9 @@
-mod utils;
-
 use assert_cmd::prelude::*;
-use std::io::Read;
 use std::process::Command;
 use structopt::clap::{crate_name, crate_version};
-use utils::{Error, TestProcess};
+
+/// Error type used by tests
+pub type Error = Box<dyn std::error::Error>;
 
 /// Show help and exit.
 #[test]
@@ -28,23 +27,3 @@ fn version_shows() -> Result<(), Error> {
 
     Ok(())
 }
-
-// TODO
-// #[test]
-// fn serves_geolocations() -> Result<(), Error> {
-//     let mut dh = TestProcess::new(vec![""])?;
-//
-//     reqwest::blocking::get(&dh.url)?.error_for_status()?;
-//
-//     dh.child.kill()?;
-//     let mut output = String::new();
-//     dh.child
-//         .stdout
-//         .as_mut()
-//         .unwrap()
-//         .read_to_string(&mut output)?;
-//
-//     assert!(output.is_empty());
-//
-//     Ok(())
-// }
