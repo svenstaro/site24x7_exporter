@@ -30,7 +30,7 @@ serde_path_to_error = "0.1"
 tokio = { version = "1", features = ["full"] }
 hyper = { version = "0.14", features = ["full"] }
 lazy_static = "1.0"
-strum_macros = "0.20"
+strum_macros = "0.21"
 regex = "1"
 chrono = { version = "0.4", features = ["serde"] }
 
