@@ -69,7 +69,7 @@ pub async fn hyper_service(
             );
             let mut access_token_write = access_token.write().await;
             let access_token_res =
-                get_access_token(&CLIENT, &site24x7_client_info, &refresh_token).await;
+                get_access_token(&CLIENT, site24x7_client_info, refresh_token).await;
             *access_token_write = match access_token_res {
                 Ok(access_token) => access_token,
                 Err(e) => {

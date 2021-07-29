@@ -33,7 +33,7 @@ fn set_metrics_for_monitors(monitors: &[site24x7_types::MonitorMaybe], monitor_g
             let up_gauge = MONITOR_UP_GAUGE.with_label_values(&[
                 &monitor_type,
                 &monitor.name,
-                &monitor_group,
+                monitor_group,
                 &location.location_name,
             ]);
             up_gauge.set(location.clone().status as i64);
@@ -74,7 +74,7 @@ fn set_metrics_for_monitors(monitors: &[site24x7_types::MonitorMaybe], monitor_g
             let latency_gauge = MONITOR_LATENCY_SECONDS_GAUGE.with_label_values(&[
                 &monitor_type,
                 &monitor.name,
-                &monitor_group,
+                monitor_group,
                 &location.location_name,
             ]);
             latency_gauge.set(attribute_value);

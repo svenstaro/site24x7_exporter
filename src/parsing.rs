@@ -8,10 +8,10 @@ use crate::site24x7_types as types;
 pub fn parse_current_status(
     json: &str,
 ) -> Result<types::CurrentStatusData, types::CurrentStatusError> {
-    let deserializer = &mut serde_json::Deserializer::from_str(&json);
+    let deserializer = &mut serde_json::Deserializer::from_str(json);
     let current_status_resp_result = serde_path_to_error::deserialize(deserializer);
 
-    let v: serde_json::Value = serde_json::from_str(&json).context("JSON seems invalid.")?;
+    let v: serde_json::Value = serde_json::from_str(json).context("JSON seems invalid.")?;
     debug!(
         "JSON received from server: \n{}",
         serde_json::to_string_pretty(&v).context("Couldn't format JSON for debug output")?
@@ -20,7 +20,7 @@ pub fn parse_current_status(
         .map_err(|e| {
             // For better error path output, try to parse into `CurrentStatusResponseInner`
             // directly. This will give us a path to the error.
-            let debug_deserializer = &mut serde_json::Deserializer::from_str(&json);
+            let debug_deserializer = &mut serde_json::Deserializer::from_str(json);
             let debug_deserializer_result: Result<types::CurrentStatusResponseInner, _> =
                 serde_path_to_error::deserialize(debug_deserializer);
             let debug_err = debug_deserializer_result.err();
