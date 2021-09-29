@@ -35,6 +35,6 @@ regex = "1"
 chrono = { version = "0.4", features = ["serde"] }
 
 [dev-dependencies]
-pretty_assertions = "0.7"
+pretty_assertions = "1.0"
 assert_cmd = "2.0"
 port_check = "0.1"
