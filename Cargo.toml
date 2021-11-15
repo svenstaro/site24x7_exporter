@@ -19,7 +19,7 @@ reqwest = { version = "0.11", features = ["json", "blocking", "rustls-tls"], def
 prometheus = { version = "0.13", default-features = false }
 structopt = "0.3"
 http = "0.2"
-simplelog = "0.10"
+simplelog = "0.11"
 log = "0.4"
 anyhow = "1"
 thiserror = "1"
