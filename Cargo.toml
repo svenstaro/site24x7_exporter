@@ -12,6 +12,7 @@ publish = false
 lto = true
 opt-level = 'z'
 codegen-units = 1
+strip = true
 
 [dependencies]
 dotenv = "0.15"
