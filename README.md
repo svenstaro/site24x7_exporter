@@ -162,7 +162,7 @@ If you want to run the test suite, you'll need to run it as
 
 In order to release this, do:
 
-- `cargo release --dry-run`
 - `cargo release`
+- `cargo release --execute`
 - Releases will automatically be deployed by Github Actions.
 - Docker images will automatically be built by Docker Hub.
