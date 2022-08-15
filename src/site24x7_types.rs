@@ -33,7 +33,7 @@ pub struct CurrentStatusResponseInner {
     pub data: CurrentStatusData,
 }
 
-#[derive(Clone, Deserialize_repr, Debug, PartialEq)]
+#[derive(Clone, Deserialize_repr, Debug, PartialEq, Eq)]
 #[repr(u8)]
 pub enum Status {
     Down = 0,
@@ -54,7 +54,7 @@ impl Default for Status {
     }
 }
 
-#[derive(Clone, Deserialize, Debug, PartialEq)]
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
 pub struct CurrentStatusData {
     #[serde(default)]
     pub monitors: Vec<MonitorMaybe>,
@@ -108,7 +108,7 @@ where
     Ok(None)
 }
 
-#[derive(Clone, Deserialize, Debug, PartialEq)]
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
 pub struct Location {
     #[serde(default)]
     pub status: Status,
@@ -119,7 +119,7 @@ pub struct Location {
     pub last_polled_time: Option<DateTime<FixedOffset>>,
 }
 
-#[derive(Clone, Deserialize, Display, Debug, PartialEq)]
+#[derive(Clone, Deserialize, Display, Debug, PartialEq, Eq)]
 #[serde(tag = "monitor_type")]
 #[allow(clippy::upper_case_acronyms)]
 pub enum MonitorMaybe {
@@ -131,7 +131,7 @@ pub enum MonitorMaybe {
     Unknown,
 }
 
-#[derive(Clone, Debug, PartialEq)]
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Tag {
     pub key: String,
     pub value: String,
@@ -153,7 +153,7 @@ impl<'de> Deserialize<'de> for Tag {
     }
 }
 
-#[derive(Clone, Deserialize, Debug, PartialEq)]
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
 pub struct Monitor {
     pub name: String,
     pub unit: Option<String>,
@@ -172,7 +172,7 @@ pub struct Monitor {
     pub last_polled_time: Option<DateTime<FixedOffset>>,
 }
 
-#[derive(Clone, Deserialize, Debug, PartialEq)]
+#[derive(Clone, Deserialize, Debug, PartialEq, Eq)]
 pub struct MonitorGroup {
     #[serde(default)]
     pub monitors: Vec<MonitorMaybe>,
