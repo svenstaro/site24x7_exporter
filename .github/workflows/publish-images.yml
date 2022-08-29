@@ -15,7 +15,7 @@ jobs:
         run: sudo apt install -y qemu binfmt-support qemu-user-static
 
       - name: podman login
-        run: echo ${{ secrets.DOCKERHUB_TOKEN }} | podman login --username ${{ secrets.DOCKERHUB_USERNAME }} docker.io
+        run: podman login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }} docker.io
 
       - name: Get tag name
         id: tag_name
