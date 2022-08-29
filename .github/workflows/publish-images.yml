@@ -1,9 +1,6 @@
 name: Publish images
 
-on:
-  push:
-    tags:
-      - 'v*'
+on: [push]
 
 jobs:
   publish:
@@ -34,3 +31,4 @@ jobs:
 
       - name: podman manifest push tag version
         run: podman manifest push site24x7_exporter docker.io/svenstaro/site24x7_exporter:{{ steps.tag.outputs.current_version }}
+        if: startsWith(github.ref, 'refs/tags/v')
