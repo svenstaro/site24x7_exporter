@@ -6,6 +6,8 @@ jobs:
   binaries:
     name: Binary ${{ matrix.target }} (on ${{ matrix.os }})
     runs-on: ${{ matrix.os }}
+    outputs:
+      version: ${{ steps.extract_version.outputs.version }}
     strategy:
       matrix:
         include:
@@ -70,23 +72,29 @@ jobs:
           name: ${{ matrix.target }}
           path: target/${{ matrix.target }}/release/site24x7_exporter${{ env.EXE }}
 
+      - name: Get version from tag
+        id: extract_version
+        run: |
+          echo ::set-output name=version::${GITHUB_REF_NAME#v}
+        shell: bash
+
       - name: Get CHANGELOG.md entry
         id: changelog_reader
         uses: mindsers/changelog-reader-action@v2.2.0
         with:
-          version: ${{ github.ref_name }}
+          version: ${{ steps.extract_version.outputs.version }}
           path: ./CHANGELOG.md
-        if: startsWith(github.ref_name, 'v')
+        if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag'
 
       - name: Release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           file: target/${{ matrix.target }}/release/site24x7_exporter${{ env.EXE }}
-          tag: ${{ github.ref }}
-          asset_name: site24x7_exporter-$tag-${{ matrix.target }}${{ env.EXE }}
+          tag: ${{ github.ref_name }}
+          asset_name: site24x7_exporter-${{ steps.extract_version.outputs.version }}-${{ matrix.target }}${{ env.EXE }}
           body: ${{ steps.changelog_reader.outputs.log_entry }}
-        if: startsWith(github.ref_name, 'v')
+        if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag'
 
   container-images:
     name: Publish images
@@ -119,13 +127,13 @@ jobs:
         run: podman login --username ${{ secrets.DOCKERHUB_USERNAME }} --password ${{ secrets.DOCKERHUB_TOKEN }} docker.io
 
       - name: podman build linux/arm64
-        run: podman build --platform linux/arm64 --manifest site24x7_exporter -f Containerfile target/aarch64-unknown-linux-gnu/release
+        run: podman build --format docker --platform linux/arm64/v8 --manifest site24x7_exporter -f Containerfile target/aarch64-unknown-linux-gnu/release
 
       - name: podman build linux/amd64
-        run: podman build --platform linux/amd64 --manifest site24x7_exporter -f Containerfile target/x86_64-unknown-linux-gnu/release
+        run: podman build --format docker --platform linux/amd64 --manifest site24x7_exporter -f Containerfile target/x86_64-unknown-linux-gnu/release
 
       - name: podman build linux/arm
-        run: podman build --platform linux/arm --manifest site24x7_exporter -f Containerfile target/armv7-unknown-linux-gnueabihf/release
+        run: podman build --format docker --platform linux/arm/v7 --manifest site24x7_exporter -f Containerfile target/armv7-unknown-linux-gnueabihf/release
 
       - run: podman manifest inspect site24x7_exporter
 
@@ -133,5 +141,5 @@ jobs:
         run: podman manifest push site24x7_exporter docker.io/svenstaro/site24x7_exporter:latest
 
       - name: podman manifest push tag version
-        run: podman manifest push site24x7_exporter docker.io/svenstaro/site24x7_exporter:${{ github.ref_name }}
+        run: podman manifest push site24x7_exporter docker.io/svenstaro/site24x7_exporter:${{ needs.binaries.outputs.version }}
         if: startsWith(github.ref_name, 'v')
