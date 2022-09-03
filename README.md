@@ -164,5 +164,4 @@ In order to release this, do:
 
 - `cargo release`
 - `cargo release --execute`
-- Releases will automatically be deployed by Github Actions.
-- Docker images will automatically be built by Docker Hub.
+- Releases will automatically be deployed by GitHub Actions.
