@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Update deps
 
 ## [0.6.0] - 2021-04-18
 - Add more locations to `/geolocation` endpoint [#111](https://github.com/svenstaro/site24x7_exporter/pull/111) (thanks @Whyeasy)
