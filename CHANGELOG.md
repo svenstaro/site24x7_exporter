@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 
+## [1.0.0] - 2022-09-07
+
 ## [0.6.1] - 2022-09-05
 - Update deps
 
@@ -60,7 +62,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial working version.
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v0.6.1...HEAD
+[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/svenstaro/site24x7_exporter/compare/v0.6.1...v1.0.0
 [0.6.1]: https://github.com/svenstaro/site24x7_exporter/compare/v0.6.0...v0.6.1
 [0.6.0]: https://github.com/svenstaro/site24x7_exporter/compare/v0.5.2...v0.6.0
 [0.5.2]: https://github.com/svenstaro/site24x7_exporter/compare/v0.5.1...v0.5.2
