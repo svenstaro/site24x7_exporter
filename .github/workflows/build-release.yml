@@ -78,14 +78,14 @@ jobs:
           echo ::set-output name=version::${GITHUB_REF_NAME#v}
         shell: bash
 
-      - name: Get CHANGELOG.md entry
+      - name: Install CHANGELOG parser
+        uses: taiki-e/install-action@parse-changelog
+
+      - name: Get CHANGELOG entry
         id: changelog_reader
-        uses: mindsers/changelog-reader-action@v2
-        with:
-          validation_level: warn
-          version: ${{ steps.extract_version.outputs.version }}
-          path: ./CHANGELOG.md
+        run: echo "::set-output name=changelog-entry::$(parse-changelog CHANGELOG.md ${{ steps.extract_version.outputs.version }})"
         if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag'
+        shell: bash
 
       - name: Release
         uses: svenstaro/upload-release-action@v2
@@ -94,7 +94,7 @@ jobs:
           file: target/${{ matrix.target }}/release/site24x7_exporter${{ env.EXE }}
           tag: ${{ github.ref_name }}
           asset_name: site24x7_exporter-${{ steps.extract_version.outputs.version }}-${{ matrix.target }}${{ env.EXE }}
-          body: ${{ steps.changelog_reader.outputs.changes }}
+          body: ${{ steps.changelog_reader.outputs.changelog-entry }}
         if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag'
 
   container-images:
