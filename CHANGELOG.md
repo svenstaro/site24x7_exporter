@@ -8,8 +8,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Update deps
 
 ## [1.0.0] - 2022-09-07
+- Nothing changed in this release but I think this project is stable enough to call it 1.0.0. :)
 
 ## [0.6.1] - 2022-09-05
 - Update deps
