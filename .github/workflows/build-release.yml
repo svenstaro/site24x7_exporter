@@ -83,7 +83,9 @@ jobs:
 
       - name: Get CHANGELOG entry
         id: changelog_reader
-        run: echo "::set-output name=changelog-entry::$(parse-changelog CHANGELOG.md ${{ steps.extract_version.outputs.version }})"
+        run: |
+          parse-changelog CHANGELOG.md ${{ steps.extract_version.outputs.version }} > changelog-entry
+          [[ -s changelog-entry ]] && echo "::set-output name=changelog-entry::$(cat changelog-entry)"
         if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag'
         shell: bash
 
