@@ -82,6 +82,7 @@ jobs:
         id: changelog_reader
         uses: mindsers/changelog-reader-action@v2
         with:
+          validation_level: warn
           version: ${{ steps.extract_version.outputs.version }}
           path: ./CHANGELOG.md
         if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag'
@@ -93,7 +94,7 @@ jobs:
           file: target/${{ matrix.target }}/release/site24x7_exporter${{ env.EXE }}
           tag: ${{ github.ref_name }}
           asset_name: site24x7_exporter-${{ steps.extract_version.outputs.version }}-${{ matrix.target }}${{ env.EXE }}
-          body: ${{ steps.changelog_reader.outputs.log_entry }}
+          body: ${{ steps.changelog_reader.outputs.changes }}
         if: startsWith(github.ref_name, 'v') && github.ref_type == 'tag'
 
   container-images:
