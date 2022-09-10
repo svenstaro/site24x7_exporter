@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased] - ReleaseDate
 - Update deps
+- Fix release process
 
 ## [1.0.0] - 2022-09-07
 - Nothing changed in this release but I think this project is stable enough to call it 1.0.0. :)
