@@ -162,6 +162,6 @@ If you want to run the test suite, you'll need to run it as
 
 In order to release this, do:
 
-- `cargo release`
-- `cargo release --execute`
+- `cargo release <version>`
+- `cargo release --execute <version>`
 - Releases will automatically be deployed by GitHub Actions.
