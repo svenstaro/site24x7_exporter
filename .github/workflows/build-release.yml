@@ -143,8 +143,6 @@ jobs:
       - name: podman build linux/arm
         run: podman build --format docker --platform linux/arm/v7 --manifest site24x7_exporter -f Containerfile target/armv7-unknown-linux-gnueabihf/release
 
-      - run: podman manifest inspect site24x7_exporter
-
       - name: podman manifest push latest
         run: podman manifest push site24x7_exporter docker.io/svenstaro/site24x7_exporter:latest
 
