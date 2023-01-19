@@ -39,8 +39,7 @@ pub async fn get_access_token(
 
     let access_token_resp_parsed =
         serde_json::from_str(&access_token_resp_text).context(format!(
-            "Couldn't parse server response while getting access token. Server replied: '{}",
-            access_token_resp_text
+            "Couldn't parse server response while getting access token. Server replied: '{access_token_resp_text}"
         ))?;
     match access_token_resp_parsed {
         zoho_types::AccessTokenResponse::Success(inner) => {
@@ -64,9 +63,9 @@ pub async fn fetch_current_status(
     access_token: &str,
 ) -> Result<site24x7_types::CurrentStatusData, site24x7_types::CurrentStatusError> {
     let current_status_resp = client
-        .get(&format!("{}/current_status", site24x7_endpoint))
+        .get(&format!("{site24x7_endpoint}/current_status"))
         .header("Accept", "application/json; version=2.0")
-        .header("Authorization", format!("Zoho-oauthtoken {}", access_token))
+        .header("Authorization", format!("Zoho-oauthtoken {access_token}"))
         .send()
         .await
         .context("Error during web request to fetch curent status.")?;

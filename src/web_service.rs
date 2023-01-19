@@ -34,7 +34,7 @@ pub async fn hyper_service(
     if req.method() != Method::GET || req.uri().path() != metrics_path {
         info!("Serving default path");
         return Ok(Response::new(
-            format!("site24x7_exporter\n\nTry {}", metrics_path).into(),
+            format!("site24x7_exporter\n\nTry {metrics_path}").into(),
         ));
     }
 

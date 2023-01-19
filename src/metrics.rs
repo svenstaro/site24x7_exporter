@@ -215,7 +215,7 @@ mod tests {
 
     /// Return whether `metric_name` has a label `label_name` having `label_value` in a list `metric_families`.
     fn has_label_with_value(
-        metric_families: &Vec<MetricFamily>,
+        metric_families: &[MetricFamily],
         metric_name: &str,
         label_name: &str,
         label_value: &str,
@@ -224,15 +224,11 @@ mod tests {
             .iter()
             .find(|mf| mf.get_name() == metric_name)
         {
-            metric_families
-                .get_metric()
-                .iter()
-                .find(|m| {
-                    m.get_label()
-                        .iter()
-                        .any(|l| l.get_name() == label_name && l.get_value() == label_value)
-                })
-                .is_some()
+            metric_families.get_metric().iter().any(|m| {
+                m.get_label()
+                    .iter()
+                    .any(|l| l.get_name() == label_name && l.get_value() == label_value)
+            })
         } else {
             false
         }
