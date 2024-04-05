@@ -11,48 +11,15 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Setup Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: stable
-          override: true
-          components: rustfmt, clippy
-
-      - name: cargo build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-
-      - name: cargo test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: -- --test-threads 1
-
-      - name: cargo fmt
-        uses: actions-rs/cargo@v1
-        with:
-          command: fmt
-          args: --all -- --check
-
-      - name: cargo clippy
-        uses: actions-rs/cargo@v1
-        with:
-          command: clippy
-          args: -- -D warnings
-
-      - name: Run cargo-tarpaulin
-        uses: actions-rs/tarpaulin@v0.1
-        with:
-          # Force a full recompile for tarpaulin in order to not suffer from some weird error that occurs when we re-use
-          # the same target dir.
-          args: --target-dir /tmp -- --test-threads 1
-        if: matrix.os == 'ubuntu-latest'
-
-      - name: Upload coverage report to codecov.io
-        uses: codecov/codecov-action@v1
-        if: matrix.os == 'ubuntu-latest'
+        uses: dtolnay/rust-toolchain@stable
+      - uses: actions/checkout@v4
+      - run: cargo install cargo-tarpaulin
+      - run: cargo build --all
+      - run: cargo fmt --all -- --check
+      - run: cargo clippy -- -D warnings
+      - run: cargo test --all -- --test-threads 1
+      - run: |
+          cargo tarpaulin --out Xml
+          bash <(curl -s https://codecov.io/bash)
+        if: matrix.os == 'ubuntu-latest' && matrix.rust == 'nightly' && matrix.target == 'native'
