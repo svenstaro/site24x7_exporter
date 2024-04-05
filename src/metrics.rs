@@ -18,6 +18,7 @@ fn set_metrics_for_monitors(monitors: &[site24x7_types::MonitorMaybe], monitor_g
         let monitor = match monitor_maybe {
             site24x7_types::MonitorMaybe::URL(m)
             | site24x7_types::MonitorMaybe::HOMEPAGE(m)
+            | site24x7_types::MonitorMaybe::RESTAPI(m)
             | site24x7_types::MonitorMaybe::REALBROWSER(m) => m,
             site24x7_types::MonitorMaybe::Unknown => continue,
         };
@@ -93,6 +94,7 @@ fn has_monitor_with_label_values(
         let monitor = match monitor_maybe {
             site24x7_types::MonitorMaybe::URL(m)
             | site24x7_types::MonitorMaybe::HOMEPAGE(m)
+            | site24x7_types::MonitorMaybe::RESTAPI(m)
             | site24x7_types::MonitorMaybe::REALBROWSER(m) => m,
             site24x7_types::MonitorMaybe::Unknown => continue,
         };
