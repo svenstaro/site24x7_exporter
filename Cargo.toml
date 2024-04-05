@@ -18,7 +18,7 @@ strip = true
 dotenv = "0.15"
 reqwest = { version = "0.12", features = ["json", "blocking", "rustls-tls"], default-features = false }
 prometheus = { version = "0.13", default-features = false }
-structopt = "0.3"
+clap = { version = "4", features = ["derive", "cargo", "wrap_help", "deprecated", "env"] }
 http = "1.1"
 simplelog = "0.12"
 log = "0.4"
@@ -31,6 +31,7 @@ serde_path_to_error = "0.1"
 tokio = { version = "1", features = ["full"] }
 hyper = { version = "0.14", features = ["full"] }
 lazy_static = "1.0"
+strum = { version = "0.26", features = ["derive"] }
 strum_macros = "0.26"
 regex = "1"
 chrono = { version = "0.4", features = ["serde"] }

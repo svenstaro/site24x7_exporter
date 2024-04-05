@@ -1,18 +1,17 @@
 use anyhow::{Context, Result};
-use http::uri::PathAndQuery;
+use clap::{crate_name, crate_version, Parser};
 use hyper::service::{make_service_fn, service_fn};
 use hyper::Server;
 use lazy_static::lazy_static;
 use log::{debug, info};
 use prometheus::{GaugeVec, IntGaugeVec};
-use simplelog::{LevelFilter, TermLogger};
-use std::net::SocketAddr;
-use std::sync::Arc;
-use structopt::clap::{crate_name, crate_version};
-use structopt::StructOpt;
+use simplelog::TermLogger;
 use tokio::sync::RwLock;
 
+use std::sync::Arc;
+
 mod api_communication;
+mod args;
 mod geodata;
 mod metrics;
 mod parsing;
@@ -36,43 +35,9 @@ lazy_static! {
     .expect("Couldn't create monitor_latency_seconds metric");
 }
 
-#[derive(StructOpt, Clone, Debug)]
-#[structopt(
-    name = "site24x7_exporter",
-    author,
-    about,
-    global_settings = &[structopt::clap::AppSettings::ColoredHelp],
-)]
-pub struct Config {
-    /// API endpoint to use (depends on region, see https://site24x7.com/help/api)
-    #[structopt(long, default_value = "site24x7.com",
-        possible_values = &["site24x7.com", "site24x7.eu", "site24x7.cn", "site24x7.in", "site24x7.net.au"])]
-    pub site24x7_endpoint: String,
-
-    /// Address on which to expose metrics and web interface
-    #[structopt(long = "web.listen-address", default_value = "0.0.0.0:9803")]
-    pub listen_address: SocketAddr,
-
-    /// Path under which to expose metrics
-    #[structopt(long = "web.telemetry-path", default_value = "/metrics")]
-    pub metrics_path: PathAndQuery,
-
-    /// Path under which to expose geolocation information
-    #[structopt(long = "web.geolocation-path", default_value = "/geolocation")]
-    pub geolocation_path: PathAndQuery,
-
-    /// Only log messages with the given severity or above
-    #[structopt(
-        long = "log.level",
-        default_value = "info",
-        possible_values = &["error", "warn", "info", "debug", "trace"],
-    )]
-    pub loglevel: LevelFilter,
-}
-
 #[tokio::main]
 async fn main() -> Result<()> {
-    let args = Config::from_args();
+    let args = args::Config::parse();
 
     TermLogger::init(
         args.loglevel,
@@ -97,7 +62,11 @@ async fn main() -> Result<()> {
         site24x7_endpoint: format!("https://www.{}/api", args.site24x7_endpoint),
         zoho_endpoint: format!(
             "https://accounts.zoho.{}",
-            args.site24x7_endpoint.splitn(2, '.').last().unwrap()
+            args.site24x7_endpoint
+                .to_string()
+                .splitn(2, '.')
+                .last()
+                .unwrap()
         ),
         client_id,
         client_secret,

@@ -28,32 +28,26 @@ Pull requests welcome!
 ## CLI usage
 
 ```
-site24x7_exporter 1.0.1
-Sven-Hendrik Haase <svenstaro@gmail.com>
-A Prometheus compatible exporter for site24x7.com
+A Prometheus compatible exporter for site24x7
 
-USAGE:
-    site24x7_exporter [OPTIONS]
+Usage: site24x7_exporter [OPTIONS]
 
-FLAGS:
-    -h, --help       Prints help information
-    -V, --version    Prints version information
-
-OPTIONS:
-        --web.geolocation-path <geolocation-path>
-            Path under which to expose geolocation info as JSON [default: /geolocation]
-
-        --web.listen-address <listen-address>
-            Address on which to expose metrics and web interface [default: 0.0.0.0:9803]
-
-        --log.level <loglevel>
-            Only log messages with the given severity or above [default: info]  [possible values: error,
-            warn, info, debug, trace]
-        --web.telemetry-path <metrics-path>        Path under which to expose metrics [default: /metrics]
-        --site24x7-endpoint <site24x7-endpoint>
-            API endpoint to use (depends on region, see https://site24x7.com/help/api) [default: site24x7.com]
-            [possible values: site24x7.com, site24x7.eu, site24x7.cn, site24x7.in,
-            site24x7.net.au]
+Options:
+      --site24x7-endpoint <SITE24X7_ENDPOINT>
+          API endpoint to use (depends on region, see https://site24x7.com/help/api) [default: site24x7.com]
+          [possible values: site24x7.com, site24x7.eu, site24x7.cn, site24x7.in, site24x7.net.au]
+      --web.listen-address <LISTEN_ADDRESS>
+          Address on which to expose metrics and web interface [default: 0.0.0.0:9803]
+      --web.telemetry-path <METRICS_PATH>
+          Path under which to expose metrics [default: /metrics]
+      --web.geolocation-path <GEOLOCATION_PATH>
+          Path under which to expose geolocation information [default: /geolocation]
+      --log.level <LOGLEVEL>
+          Only log messages with the given severity or above [default: info]
+  -h, --help
+          Print help
+  -V, --version
+          Print version
 ```
 
 ## Using with proxies
