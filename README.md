@@ -1,6 +1,6 @@
 # site24x7_exporter
 
-[![GitHub Actions Workflow](https://github.com/svenstaro/site24x7_exporter/workflows/Build/badge.svg)](https://github.com/svenstaro/site24x7_exporter/actions)
+[![GitHub Actions Workflow](https://github.com/svenstaro/site24x7_exporter/actions/workflows/ci.yml/badge.svg)](https://github.com/svenstaro/site24x7_exporter/actions)
 [![Docker Hub](https://img.shields.io/docker/pulls/svenstaro/site24x7_exporter)](https://cloud.docker.com/repository/docker/svenstaro/site24x7_exporter/)
 [![codecov](https://codecov.io/gh/svenstaro/site24x7_exporter/branch/master/graph/badge.svg)](https://codecov.io/gh/svenstaro/site24x7_exporter)
 [![license](http://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/svenstaro/site24x7_exporter/blob/master/LICENSE)
