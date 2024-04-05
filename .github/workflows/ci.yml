@@ -20,6 +20,6 @@ jobs:
       - run: cargo test --all -- --test-threads 1
       - run: |
           cargo install cargo-tarpaulin
-          cargo tarpaulin --out Xml
+          cargo tarpaulin --out Xml -- --test-threads 1
           bash <(curl -s https://codecov.io/bash)
         if: matrix.os == 'ubuntu-latest'
