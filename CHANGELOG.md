@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [1.1.0] - 2024-04-05
 - Update to clap 4 and other deps
 - Update support of REST API monitors [#342](https://github.com/svenstaro/site24x7_exporter/pull/342) (thanks @AlKapkone)
 
@@ -69,7 +71,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial working version.
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/svenstaro/site24x7_exporter/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/svenstaro/site24x7_exporter/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/svenstaro/site24x7_exporter/compare/v0.6.1...v1.0.0
 [0.6.1]: https://github.com/svenstaro/site24x7_exporter/compare/v0.6.0...v0.6.1
