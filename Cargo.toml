@@ -16,7 +16,7 @@ strip = true
 
 [dependencies]
 dotenv = "0.15"
-reqwest = { version = "0.11", features = ["json", "blocking", "rustls-tls"], default-features = false }
+reqwest = { version = "0.12", features = ["json", "blocking", "rustls-tls"], default-features = false }
 prometheus = { version = "0.13", default-features = false }
 structopt = "0.3"
 http = "0.2"
@@ -31,11 +31,11 @@ serde_path_to_error = "0.1"
 tokio = { version = "1", features = ["full"] }
 hyper = { version = "0.14", features = ["full"] }
 lazy_static = "1.0"
-strum_macros = "0.25"
+strum_macros = "0.26"
 regex = "1"
 chrono = { version = "0.4", features = ["serde"] }
 
 [dev-dependencies]
 pretty_assertions = "1.2"
 assert_cmd = "2.0"
-port_check = "0.1"
+port_check = "0.2"
