@@ -125,6 +125,7 @@ pub struct Location {
 pub enum MonitorMaybe {
     URL(Monitor),
     HOMEPAGE(Monitor),
+    RESTAPI(Monitor),
     REALBROWSER(Monitor),
     // SSL_CERT(Monitor),
     #[serde(other)]

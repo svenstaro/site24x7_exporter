@@ -14,6 +14,7 @@ This exporter currently supports these monitor types:
 
 - URL ["Website"](https://www.site24x7.com/help/admin/adding-a-monitor/website-monitoring.html)
 - HOMEPAGE ["Web Page Speed (Browser)"](https://www.site24x7.com/help/admin/adding-a-monitor/web-page-analyzer.html)
+- RESTAPI ["REST API"](https://www.site24x7.com/help/admin/adding-a-monitor/rest-api-monitor.html)
 - REALBROWSER ["Web Transaction (Browser)"](https://www.site24x7.com/help/admin/adding-a-monitor/webapplication-monitoring-realbrowser.html)
 
 It also supports monitor groups and exposes them via tags.
@@ -130,7 +131,7 @@ This is especially convenient for development purposes or local Docker usage as 
 
 ### Run via docker
 
-    docker run --env-file ./env svenstaro/site24x7_exporter --site24x7-endpoint site24x7.eu
+    docker run --env-file ./.env -p 9803:9803 svenstaro/site24x7_exporter --site24x7-endpoint site24x7.eu
 
 ### Testing
 
