@@ -8,14 +8,19 @@ use std::net::SocketAddr;
 #[derive(Debug, Clone, ValueEnum, Display)]
 pub enum Endpoint {
     #[value(name = "site24x7.com")]
+    #[strum(serialize = "site24x7.com")]
     Com,
     #[value(name = "site24x7.eu")]
+    #[strum(serialize = "site24x7.eu")]
     Eu,
     #[value(name = "site24x7.cn")]
+    #[strum(serialize = "site24x7.cn")]
     Cn,
     #[value(name = "site24x7.in")]
+    #[strum(serialize = "site24x7.in")]
     In,
     #[value(name = "site24x7.net.au")]
+    #[strum(serialize = "site24x7.net.au")]
     NetAu,
 }
 
