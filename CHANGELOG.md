@@ -8,6 +8,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+
+## [1.1.1] - 2024-04-10
 - Fix broken API URLs
 
 ## [1.1.0] - 2024-04-05
@@ -72,7 +74,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Initial working version.
 
 <!-- next-url -->
-[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v1.1.0...HEAD
+[Unreleased]: https://github.com/svenstaro/site24x7_exporter/compare/v1.1.1...HEAD
+[1.1.1]: https://github.com/svenstaro/site24x7_exporter/compare/v1.1.0...v1.1.1
 [1.1.0]: https://github.com/svenstaro/site24x7_exporter/compare/v1.0.1...v1.1.0
 [1.0.1]: https://github.com/svenstaro/site24x7_exporter/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/svenstaro/site24x7_exporter/compare/v0.6.1...v1.0.0
