@@ -17,9 +17,14 @@ jobs:
       - run: cargo build --all
       - run: cargo fmt --all -- --check
       - run: cargo clippy -- -D warnings
-      - run: cargo test --all -- --test-threads 1
-      - run: |
-          cargo install cargo-tarpaulin
-          cargo tarpaulin --out Xml -- --test-threads 1
-          bash <(curl -s https://codecov.io/bash)
+
+      - run: cargo install cargo-tarpaulin
+        if: matrix.os == 'ubuntu-latest'
+      - run: cargo tarpaulin --out xml -- --test-threads 1
+        if: matrix.os == 'ubuntu-latest'
+      - name: Upload coverage report to codecov.io
+        uses: codecov/codecov-action@v4
+        with:
+          fail_ci_if_error: true
+          token: ${{ secrets.CODECOV_TOKEN }}
         if: matrix.os == 'ubuntu-latest'
