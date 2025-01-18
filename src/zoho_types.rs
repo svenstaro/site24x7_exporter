@@ -12,8 +12,11 @@ pub struct AccessTokenRequest {
 #[derive(Deserialize, Debug)]
 pub struct AccessTokenResponseInner {
     pub access_token: String,
+    #[allow(dead_code)]
     pub expires_in: u32,
+    #[allow(dead_code)]
     pub api_domain: String,
+    #[allow(dead_code)]
     pub token_type: String,
 }
 

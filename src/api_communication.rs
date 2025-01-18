@@ -63,7 +63,7 @@ pub async fn fetch_current_status(
     access_token: &str,
 ) -> Result<site24x7_types::CurrentStatusData, site24x7_types::CurrentStatusError> {
     let current_status_resp = client
-        .get(&format!("{site24x7_endpoint}/current_status"))
+        .get(format!("{site24x7_endpoint}/current_status"))
         .header("Accept", "application/json; version=2.0")
         .header("Authorization", format!("Zoho-oauthtoken {access_token}"))
         .send()

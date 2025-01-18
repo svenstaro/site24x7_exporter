@@ -24,6 +24,7 @@ pub enum CurrentStatusResponse {
 
 #[derive(Clone, Deserialize, Debug)]
 pub struct ApiError {
+    #[allow(dead_code)]
     pub error_code: u16,
     pub message: String,
 }
