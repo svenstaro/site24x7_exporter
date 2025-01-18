@@ -77,7 +77,7 @@ In order to get your permanent refresh token, prepare a new file `curl-secrets` 
 
 and then run this curl:
 
-    curl https://accounts.zoho.eu/oauth/v2/token -X POST @curl-secrets
+    curl https://accounts.zoho.eu/oauth/v2/token -X POST -d @curl-secrets
 
 We use the `curl-secrets` file for security purposes so that your secrets won't be temporarily visible to all users
 in a multiuser system.
