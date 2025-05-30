@@ -118,7 +118,7 @@ pub async fn hyper_service(
     encoder.encode(&metric_families, &mut buffer).unwrap();
     Ok(Response::builder()
         .status(StatusCode::OK)
-        .header(header::CONTENT_ENCODING, encoder.format_type())
+        .header(header::CONTENT_TYPE, encoder.format_type())
         .body(Body::from(buffer))
         .unwrap())
 }
