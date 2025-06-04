@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 <!-- next-header -->
 
 ## [Unreleased] - ReleaseDate
+- Use proper content-type header for prometheus [#373](https://github.com/svenstaro/site24x7_exporter/pull/373) (thanks @fiksn)
 
 ## [1.1.1] - 2024-04-10
 - Fix broken API URLs
